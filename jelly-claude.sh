@@ -9,7 +9,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE="$SCRIPT_DIR/.env"
 
-# ── Load .env ────────────────────────────────────────────────────────────────
+# proxy.mjs sits next to this script (or one directory up if cloned standalone)
+if [[ -f "$SCRIPT_DIR/proxy.mjs" ]]; then
+  PROXY_FILE="$SCRIPT_DIR/proxy.mjs"
+elif [[ -f "$SCRIPT_DIR/../proxy.mjs" ]]; then
+  PROXY_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/proxy.mjs"
+else
+  PROXY_FILE=""
+fi
+
+# ── Load .env (optional — missing .env does not block; env vars may be set in shell) ─
 if [[ -f "$ENV_FILE" ]]; then
   set -o allexport
   # shellcheck disable=SC1090
@@ -17,11 +26,9 @@ if [[ -f "$ENV_FILE" ]]; then
   set +o allexport
 else
   echo ""
-  echo "  ⚠️  No .env file found."
-  echo "  Copy .env.example to .env and fill in at least one API key."
-  echo "  Run: cp .env.example .env"
+  echo "  ℹ️  No .env file found — checking environment variables."
+  echo "  To configure keys for next time, run: cp .env.example .env"
   echo ""
-  exit 1
 fi
 
 # ── Check which key is available ─────────────────────────────────────────────
@@ -33,28 +40,61 @@ if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
 
 elif [[ -n "${OPENROUTER_API_KEY:-}" ]]; then
   echo ""
-  echo "  ✅  OpenRouter API key detected — launching with OpenRouter model tiers."
+  echo "  ✅  OpenRouter API key detected — starting proxy and launching with free model tiers."
   echo ""
+
+  # ── Start OpenRouter proxy ────────────────────────────────────────────────
+  if [[ -z "$PROXY_FILE" ]]; then
+    echo "  ❌  proxy.mjs not found (looked in $SCRIPT_DIR and parent directory)"
+    exit 1
+  fi
+
+  node "$PROXY_FILE" &
+  PROXY_PID=$!
+  trap 'kill "$PROXY_PID" 2>/dev/null || true' EXIT INT TERM
+
+  # Wait for port 7788 to be ready (up to 10 s, 20 × 0.5 s)
+  READY=0
+  for i in $(seq 1 20); do
+    if node -e "
+const net = require('net');
+const s = net.createConnection(7788, '127.0.0.1');
+s.on('connect', () => { s.destroy(); process.exit(0); });
+s.on('error', () => { s.destroy(); process.exit(1); });
+" 2>/dev/null; then
+      READY=1
+      break
+    fi
+    sleep 0.5
+  done
+
+  if [[ "$READY" -eq 0 ]]; then
+    echo "  ❌  Proxy did not start on port 7788 within 10 seconds — aborting."
+    kill "$PROXY_PID" 2>/dev/null || true
+    exit 1
+  fi
 
   # ── Model tiers ──────────────────────────────────────────────────────────
   export ANTHROPIC_API_KEY="$OPENROUTER_API_KEY"
-  export ANTHROPIC_BASE_URL="https://openrouter.ai/api/v1"
-  export ANTHROPIC_DEFAULT_OPUS_MODEL="google/gemma-4-31b-it:free"
-  export ANTHROPIC_DEFAULT_SONNET_MODEL="arcee-ai/trinity-large-preview:free"
-  export ANTHROPIC_DEFAULT_HAIKU_MODEL="nvidia/nemotron-3-super-120b-a12b"
-  export CLAUDE_CODE_SUBAGENT_MODEL="nvidia/nemotron-3-super-120b-a12b:free"
+  export ANTHROPIC_BASE_URL="http://127.0.0.1:7788"
+  export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek/deepseek-r1:free"
+  export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek/deepseek-chat:free"
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL="meta-llama/llama-3.3-70b-instruct:free"
+  export CLAUDE_CODE_SUBAGENT_MODEL="google/gemma-2-9b-it:free"
 
-  exec claude "$@"
+  # Run claude as a child process (not exec) so the EXIT trap fires on completion
+  # and reliably kills the proxy regardless of how claude exits.
+  claude "$@"
 
 else
   echo ""
-  echo "  ❌  No API key found."
+  echo "  ℹ️  No API key found — falling through to Claude's built-in login."
   echo ""
-  echo "  You need either:"
-  echo "    ANTHROPIC_API_KEY   — get one at https://console.anthropic.com"
-  echo "    OPENROUTER_API_KEY  — get one at https://openrouter.ai/keys"
+  echo "  To use free OpenRouter models instead, add to your .env:"
+  echo "    OPENROUTER_API_KEY=<your key>   — get one at https://openrouter.ai/keys"
   echo ""
-  echo "  Add the key to your .env file and try again."
+  echo "  To use paid Claude models, add:"
+  echo "    ANTHROPIC_API_KEY=<your key>    — get one at https://console.anthropic.com"
   echo ""
-  exit 1
+  exec claude "$@"
 fi
