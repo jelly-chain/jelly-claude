@@ -42,7 +42,7 @@ cd jelly-claude
 bash setup.sh
 
 # 3. Add your API key to .env
-nano .env   # or: open .env in any editor
+nano .env  # or: open .env in any editor
 
 # 4. Launch the agent
 bash jelly-claude.sh
