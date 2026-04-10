@@ -78,6 +78,19 @@ else
   ok ".env already exists"
 fi
 
+# ── 5b. Check for API key (non-blocking warning) ─────────────────────────────
+ENV_HAS_KEY=false
+if [[ -f "$SCRIPT_DIR/.env" ]]; then
+  if grep -qE '^(ANTHROPIC_API_KEY|OPENROUTER_API_KEY)=.+' "$SCRIPT_DIR/.env" 2>/dev/null; then
+    ENV_HAS_KEY=true
+  fi
+fi
+if [[ "$ENV_HAS_KEY" == "false" ]]; then
+  warn "No API key found in .env yet."
+  warn "Add ANTHROPIC_API_KEY or OPENROUTER_API_KEY before running jelly-claude.sh."
+  warn "(Without a key, jelly-claude.sh will fall through to Claude's built-in login.)"
+fi
+
 # ── 6. Create wallet directory ───────────────────────────────────────────────
 step "Creating wallet directory..."
 mkdir -p "$WALLETS_DIR"
@@ -264,7 +277,12 @@ echo "    Solana:  $SOLANA_ADDRESS"
 echo "    EVM/BNB: $EVM_ADDRESS"
 echo ""
 echo "  Next steps:"
-echo "    1. Add your API key to: $SCRIPT_DIR/.env"
+if [[ "$ENV_HAS_KEY" == "false" ]]; then
+  echo "    1. ⚠️  Add an API key to: $SCRIPT_DIR/.env"
+  echo "       (ANTHROPIC_API_KEY or OPENROUTER_API_KEY)"
+else
+  echo "    1. ✅  API key already set in: $SCRIPT_DIR/.env"
+fi
 echo "    2. Fund your Solana wallet with SOL (for gas)"
 echo "    3. Fund your EVM wallet with BNB (on BSC) or USDC (on Polygon)"
 echo "    4. For Polymarket: deposit USDC on Polygon"
