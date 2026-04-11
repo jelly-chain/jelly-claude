@@ -21,7 +21,7 @@ NC='\033[0m'
 banner() {
   echo ""
   echo -e "${CYAN}  ╔══════════════════════════════════════════════════╗${NC}"
-  echo -e "${CYAN}  ║         Jelly-Claude Setup Wizard                ║${NC}"
+  echo -e "${CYAN}  ║         Jelly-Claude  Full Setup                 ║${NC}"
   echo -e "${CYAN}  ║   Multi-Chain AI Agent — github.com/jelly-chain  ║${NC}"
   echo -e "${CYAN}  ╚══════════════════════════════════════════════════╝${NC}"
   echo ""
