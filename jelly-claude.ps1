@@ -82,10 +82,10 @@ if ($AnthropicKey) {
     # ── Model tiers ──────────────────────────────────────────────────────────
     $env:ANTHROPIC_API_KEY              = $OpenRouterKey
     $env:ANTHROPIC_BASE_URL             = "http://127.0.0.1:7788"
-    $env:ANTHROPIC_DEFAULT_OPUS_MODEL   = "deepseek/deepseek-r1:free"
-    $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "deepseek/deepseek-chat:free"
-    $env:ANTHROPIC_DEFAULT_HAIKU_MODEL  = "meta-llama/llama-3.3-70b-instruct:free"
-    $env:CLAUDE_CODE_SUBAGENT_MODEL     = "google/gemma-2-9b-it:free"
+    $env:ANTHROPIC_DEFAULT_OPUS_MODEL   = "qwen/qwen3.6-plus"
+    $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "nvidia/nemotron-3-super-120b-a12b"
+    $env:ANTHROPIC_DEFAULT_HAIKU_MODEL  = "z-ai/glm-5.1"
+    $env:CLAUDE_CODE_SUBAGENT_MODEL     = "google/gemma-4-26b-a4b-it"
 
     # Run claude as a child process so the finally block can clean up the proxy
     try {
