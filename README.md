@@ -11,8 +11,10 @@
 Jelly-Claude is a launch wrapper for [Claude Code](https://github.com/anthropics/claude-code) that:
 - Automatically selects between **Anthropic paid models** and **OpenRouter free/cheap models** based on which API key you have
 - Generates your **Solana and EVM (BNB / Polygon) wallets** at first run
-- Installs a full library of **22 skills** (Solana DeFi, BNB Chain, Polymarket, Kalshi, Jupiter, Raydium, and more)
-- Loads **22 agent templates** you can invoke with `/agent` inside Claude Code
+- Installs a full library of **27 skills** (Solana DeFi, BNB Chain, Polymarket, Kalshi, Hyperliquid, Base, Birdeye, DexScreener, jellychain.fun, and more)
+- Loads **27 agent templates** you can invoke with `/agent` inside Claude Code
+- Includes `CLAUDE.md` — session memory that pre-loads wallet paths, skill locations, and protocol reference so Claude starts every session already oriented
+- Includes `torq.sh` — token-optimised launch mode using the highest-performance free models on OpenRouter
 
 ---
 
@@ -46,6 +48,9 @@ nano .env   # or: open .env in any editor
 
 # 4. Launch the agent
 bash jelly-claude.sh
+
+# Or launch in TORQ mode (best performance per token)
+bash torq.sh
 ```
 
 ### Windows (PowerShell)
@@ -81,10 +86,10 @@ Works with free or cheap models. Jelly-Claude auto-configures these model tiers:
 
 | Role | Model |
 |------|-------|
-| Opus (complex tasks) | `qwen/qwen3.6-plus` |
-| Sonnet (everyday tasks) | `nvidia/nemotron-3-super-120b-a12b` |
-| Haiku (fast tasks) | `z-ai/glm-5.1` |
-| Sub-agent | `google/gemma-4-26b-a4b-it` |
+| Opus (complex tasks) | `google/gemma-4-31b-it:free` |
+| Sonnet (everyday tasks) | `arcee-ai/trinity-large-preview:free` |
+| Haiku (fast tasks) | `nvidia/nemotron-3-super-120b-a12b` |
+| Sub-agent | `nvidia/nemotron-3-super-120b-a12b:free` |
 
 ```
 OPENROUTER_API_KEY=sk-or-...
@@ -100,8 +105,8 @@ Get one at [openrouter.ai/keys](https://openrouter.ai/keys)
 3. Generates a **Solana wallet** — saved to `~/.jelly-claude/wallets/solana.json`
 4. Generates an **EVM wallet** (works for BNB Chain and Polygon) — saved to `~/.jelly-claude/wallets/evm.json`
 5. Optionally stores your Polymarket and Kalshi API keys in `~/.jelly-claude/.keys`
-6. Installs all 22 skills from `jelly-claude-skills`
-7. Installs all 22 agent templates from `jelly-claude-agents`
+6. Installs all 27 skills from `jelly-claude-skills`
+7. Installs all 27 agent templates from `jelly-claude-agents`
 
 > **Security:** wallet private keys and API keys are stored only in `~/.jelly-claude/` on your local machine and are never committed to any repo.
 
@@ -165,7 +170,7 @@ See [github.com/jelly-chain/jelly-claude-skills](https://github.com/jelly-chain/
 
 ## Agent Templates
 
-22 pre-built agents you can summon with `/agent` inside Claude Code.
+27 pre-built agents you can summon with `/agent` inside Claude Code.
 
 Install all:
 ```bash
@@ -188,8 +193,8 @@ See [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/
 | Repo | Purpose |
 |------|---------|
 | [jelly-chain/jelly-claude](https://github.com/jelly-chain/jelly-claude) | This repo — launcher + setup |
-| [jelly-chain/jelly-claude-skills](https://github.com/jelly-chain/jelly-claude-skills) | 22 skills (Solana, BNB, prediction markets) |
-| [jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents) | 22 agent templates |
+| [jelly-chain/jelly-claude-skills](https://github.com/jelly-chain/jelly-claude-skills) | 27 skills (Solana, BNB, Base, Hyperliquid, prediction markets, jellychain.fun) |
+| [jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents) | 27 agent templates |
 
 ---
 
