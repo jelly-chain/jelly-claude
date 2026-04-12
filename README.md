@@ -81,10 +81,10 @@ Works with free or cheap models. Jelly-Claude auto-configures these model tiers:
 
 | Role | Model |
 |------|-------|
-| Opus (complex tasks) | `google/gemma-4-31b-it:free` |
-| Sonnet (everyday tasks) | `arcee-ai/trinity-large-preview:free` |
-| Haiku (fast tasks) | `nvidia/nemotron-3-super-120b-a12b` |
-| Sub-agent | `nvidia/nemotron-3-super-120b-a12b:free` |
+| Opus (complex tasks) | `qwen/qwen3.6-plus` |
+| Sonnet (everyday tasks) | `nvidia/nemotron-3-super-120b-a12b` |
+| Haiku (fast tasks) | `z-ai/glm-5.1` |
+| Sub-agent | `google/gemma-4-26b-a4b-it` |
 
 ```
 OPENROUTER_API_KEY=sk-or-...
