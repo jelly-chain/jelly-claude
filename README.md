@@ -198,7 +198,6 @@ See [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/
 
 ---
 
-##  https://x.com/JELLYqnw
 
 
 ## License
