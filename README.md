@@ -84,6 +84,7 @@ Get one at [console.anthropic.com](https://console.anthropic.com)
 ### Option B: OpenRouter (free/low-cost)
 Works with free or cheap models. Jelly-Claude auto-configures these model tiers:
 
+
 | Role | Model |
 |------|-------|
 | Opus (complex tasks) | `google/gemma-4-31b-it:free` |
