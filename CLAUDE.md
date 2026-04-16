@@ -1,4 +1,4 @@
-# Jelly-Claude — Agent Context
+# Jelly-Claude — Agent 
 
 Multi-chain AI coding agent for Solana, BNB Chain, Base, Hyperliquid, Polymarket, Kalshi, and more.
 
