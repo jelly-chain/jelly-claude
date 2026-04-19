@@ -148,6 +148,9 @@ Write-Host "  Helius — https://helius.xyz"
 $helius = Read-Host "  HELIUS_API_KEY (Enter to skip)"
 Write-Host ""
 $bnbKey = Read-Host "  BNBCHAIN_API_KEY (Enter to skip)"
+Write-Host ""
+Write-Host "  predict.fun — https://discord.gg/predictdotfun (open a support ticket)"
+$predictKey = Read-Host "  PREDICT_API_KEY (Enter to skip)"
 
 $solAddr = Get-Content $solPubPath -ErrorAction SilentlyContinue
 $evmAddr = Get-Content $evmPubPath -ErrorAction SilentlyContinue
@@ -168,6 +171,10 @@ POLYGON_RPC_URL=https://polygon-rpc.com
 KALSHI_API_KEY=$kaKey
 KALSHI_API_SECRET=$kaSec
 KALSHI_BASE_URL=https://trading-api.kalshi.com/trade-api/v2
+
+PREDICT_API_KEY=$predictKey
+PREDICT_BASE_URL=https://api.predict.fun
+BNB_RPC_URL=https://bsc-dataseed.binance.org
 
 HELIUS_API_KEY=$helius
 BNBCHAIN_API_KEY=$bnbKey

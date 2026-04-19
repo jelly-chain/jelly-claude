@@ -1,6 +1,6 @@
-# Jelly-Claude — Agent 
+# Jelly-Claude — Agent Context
 
-Multi-chain AI coding agent for Solana, BNB Chain, Base, Hyperliquid, Polymarket, Kalshi, and more.
+Multi-chain AI coding agent for Solana, BNB Chain, Base, Hyperliquid, Polymarket, Kalshi, predict.fun, and more.
 
 ---
 
@@ -38,6 +38,13 @@ const keys = Object.fromEntries(
 );
 ```
 
+Key names in `.keys`:
+- `POLYMARKET_API_KEY` / `POLYMARKET_SECRET` / `POLYMARKET_PASSPHRASE`
+- `KALSHI_API_KEY` / `KALSHI_API_SECRET`
+- `PREDICT_API_KEY` — predict.fun mainnet API key (request via Discord: discord.gg/predictdotfun)
+- `HELIUS_API_KEY` — Solana RPC (helius.xyz)
+- `BNBCHAIN_API_KEY`
+
 ---
 
 ## Skills Location
@@ -46,23 +53,37 @@ Skills are installed at `~/.claude/skills/<skill-name>/SKILL.md`.
 
 Invoke a skill: reference its SKILL.md — Claude reads it automatically when mentioned.
 
-Available skills (after install-all.sh):
-- `jupiter-skill` — Solana swaps, DCA, limit orders
-- `raydium-skill` — Solana AMM and CLMM pools
-- `meteora-skill` — Solana DLMM liquidity
-- `pumpfun-skill` — pump.fun token launches
-- `orca-skill` — Orca Whirlpools on Solana
-- `helius-skill` — Solana RPC, webhooks, DAS API
-- `polymarket-skill` — Polymarket prediction markets (Polygon)
-- `kalshi-skill` — Kalshi binary contracts (fiat)
-- `prediction-skill` — Prediction market patterns
+Available skills (after install-all.sh) — 28 total:
+- `base-skill` — Base chain DEX (Aerodrome, Uniswap V3)
+- `binance-skills-hub` — Binance CEX market data, spot trading, BSC token audits
+- `birdeye-skill` — Token analytics (Birdeye API)
 - `bnb-trading-skill` — BNB Chain DEX trading
 - `bnb-wallet-skill` — BNB Chain wallet operations
-- `hyperliquid-skill` — Hyperliquid perps trading
-- `base-skill` — Base chain DEX (Aerodrome, Uniswap V3)
-- `birdeye-skill` — Token analytics (Birdeye API)
+- `bnbchain-mcp-skill` — BNB Chain MCP server integration
 - `dexscreener-skill` — New pair discovery (DexScreener)
+- `helius-skill` — Solana RPC, webhooks, DAS API
+- `hyperliquid-skill` — Hyperliquid perps trading
 - `jelly-skill` — Live DeFi data (jellychain.fun)
+- `jupiter-skill` — Solana swaps, DCA, limit orders
+- `kalshi-skill` — Kalshi binary contracts (fiat)
+- `metaplex-skill` — Solana NFT minting (Metaplex)
+- `meteora-skill` — Solana DLMM liquidity
+- `polymarket-skill` — Polymarket prediction markets (Polygon)
+- `predict-fun-skill` — predict.fun CLOB prediction markets (BNB Chain, USDT)
+- `prediction-skill` — Prediction market patterns and Jelly Score framework
+- `pumpfun-skill` — pump.fun token launches
+- `raydium-skill` — Solana AMM and CLMM pools
+- `solana-common-errors` — Solana error reference and fixes
+- `solana-compatibility-matrix` — Package version compatibility
+- `solana-confidential-transfers` — Token-2022 confidential transfers
+- `solana-frontend-kit` — Solana wallet UI integration
+- `solana-idl-codegen` — Anchor IDL client generation
+- `solana-security-checklist` — Solana program security audit
+- `solana-testing-strategy` — LiteSVM / Mollusk testing patterns
+- `solana-trading-skill` — General Solana trading patterns
+- `solana-wallet-skill` — Solana wallet management
+
+For full descriptions, required keys, and use cases → see `SKILLS.md` in this directory.
 
 ---
 
@@ -73,21 +94,39 @@ Agents are at `~/.claude/agents/<agent-name>.md`. Invoke inside Claude Code with
 /agent <agent-name>
 ```
 
-Key agents:
+All 28 agents:
 | Agent | Use case |
 |-------|----------|
-| `jupiter-trader` | Solana swaps and DCA |
-| `polymarket-trader` | Polymarket trades |
-| `kalshi-trader` | Kalshi binary bets |
-| `pump-launcher` | Launch tokens on pump.fun |
+| `airdrop-hunter` | Find and claim Solana airdrops |
+| `base-dex-trader` | Swaps on Base (Aerodrome, Uniswap V3) |
+| `birdeye-analyst` | Token analytics and signals |
+| `bnb-data-fetcher` | BNB Chain on-chain data queries |
+| `bnb-dex-trader` | PancakeSwap and BNB DEX trading |
+| `cross-chain-bridge` | Bridge assets between chains |
+| `dexscreener-scanner` | New token pair discovery |
+| `four-meme-launcher` | Launch meme tokens on four.meme (BSC) |
 | `hyperliquid-trader` | Perps on Hyperliquid |
-| `base-dex-trader` | Swaps on Base (Aerodrome) |
-| `birdeye-analyst` | Token analytics |
-| `dexscreener-scanner` | New token discovery |
+| `jelly-predictions-agent` | On-chain data → Polymarket/Kalshi signals |
+| `jupiter-trader` | Solana swaps and DCA |
+| `kalshi-trader` | Kalshi binary bets (fiat) |
+| `meteora-launcher` | Solana DLMM liquidity provisioning |
+| `mev-arbitrage` | Solana MEV and arbitrage |
+| `multisig-manager` | Solana multisig (Squads) |
+| `nft-minter` | Mint NFTs with Metaplex |
+| `on-chain-analyst` | On-chain data analysis |
+| `orca-market-maker` | Orca Whirlpool market making |
+| `polymarket-trader` | Polymarket trades (Polygon/USDC) |
+| `portfolio-tracker` | Track portfolio across chains |
+| `predict-fun-trader` | predict.fun CLOB trading (BNB/USDT) |
+| `prediction-market-monitor` | Monitor prediction market prices |
+| `pump-launcher` | Launch tokens on pump.fun |
+| `raydium-lp` | Raydium AMM/CLMM liquidity |
+| `solana-data-fetcher` | Solana on-chain data queries |
+| `token-security-auditor` | Rug-pull and honeypot detection |
 | `wallet-watcher` | Whale wallet monitoring |
-| `on-chain-analyst` | On-chain analysis |
-| `token-security-auditor` | Rug-pull detection |
-| `jelly-predictions-agent` | On-chain → prediction markets |
+| `yield-optimizer` | DeFi yield optimization |
+
+For full descriptions, required skills/keys, and example prompts → see `AGENTS.md` in this directory.
 
 ---
 
@@ -105,8 +144,19 @@ Key agents:
 | Hyperliquid | L1 | Onchain perps (USDC margin) |
 | Polymarket | Polygon | Prediction markets (USDC) |
 | Kalshi | Off-chain | Regulated binary contracts (USD) |
+| predict.fun | BSC | CLOB prediction markets (USDT, BNB Chain) |
 | PancakeSwap | BSC | BNB Chain AMM |
 | four.meme | BSC | BSC meme token launches |
+
+---
+
+## Prediction Markets — Quick Comparison
+
+| Platform | Chain | Collateral | KYC | Key |
+|----------|-------|------------|-----|-----|
+| Polymarket | Polygon | USDC | No | `POLYMARKET_API_KEY` |
+| Kalshi | Off-chain | USD (fiat) | Yes (US) | `KALSHI_API_KEY` |
+| predict.fun | BNB Chain | USDT | No | `PREDICT_API_KEY` |
 
 ---
 
@@ -126,9 +176,21 @@ Use Helius for Solana if you have a `HELIUS_API_KEY` — much faster:
 
 ---
 
+## Additional Reference Files
+
+These files in this directory provide deeper context:
+
+- **`SKILLS.md`** — All 28 skills with descriptions, required keys, and use cases
+- **`AGENTS.md`** — All 28 agents with purpose, required skills/keys, and example prompts
+- **`STRATEGIES.md`** — Step-by-step trading playbooks combining multiple agents and skills
+- **`TROUBLESHOOTING.md`** — Common errors and fixes across all chains and protocols
+
+---
+
 ## Security Rules
 
 - **Never log or print private keys** — not to console, not to files, not in responses
 - Wallet files and `.keys` are gitignored — never commit them
 - Always show trade details (size, price, slippage, fees) before executing
 - Warn users when leverage > 10x or price impact > 1%
+- For predict.fun: always run `builder.setApprovals()` once before first trade

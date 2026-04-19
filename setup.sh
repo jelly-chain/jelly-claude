@@ -201,6 +201,11 @@ read -r -p "  HELIUS_API_KEY (Enter to skip): " HELIUS_KEY
 echo ""
 read -r -p "  BNBCHAIN_API_KEY (Enter to skip): " BNB_KEY
 
+echo ""
+echo "  predict.fun — BNB Chain prediction markets (USDT)"
+echo "  Get key via Discord: https://discord.gg/predictdotfun → support ticket"
+read -r -p "  PREDICT_API_KEY (Enter to skip): " PREDICT_KEY
+
 # Write .keys file
 mkdir -p "$(dirname "$KEYS_FILE")"
 chmod 700 "$(dirname "$KEYS_FILE")"
@@ -223,6 +228,10 @@ POLYGON_RPC_URL=https://polygon-rpc.com
 KALSHI_API_KEY=${KA_KEY:-}
 KALSHI_API_SECRET=${KA_SECRET:-}
 KALSHI_BASE_URL=https://trading-api.kalshi.com/trade-api/v2
+
+PREDICT_API_KEY=${PREDICT_KEY:-}
+PREDICT_BASE_URL=https://api.predict.fun
+BNB_RPC_URL=https://bsc-dataseed.binance.org
 
 HELIUS_API_KEY=${HELIUS_KEY:-}
 BNBCHAIN_API_KEY=${BNB_KEY:-}
