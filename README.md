@@ -98,6 +98,17 @@ Get one at [openrouter.ai/keys](https://openrouter.ai/keys)
 
 ---
 
+## Contract Address 
+
+BNB: 0xf581ee357f11d7478fafd183b4a41347c35a4444
+
+SOL: GcUANCt1YZK9L8ap128EMrcbhNMYhHR23Ungwd7ypump
+
+ETH: SOON
+
+BASE: SOON
+
+
 ## What setup.sh does
 
 1. Checks for Node.js and npm
