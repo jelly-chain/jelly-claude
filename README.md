@@ -16,6 +16,14 @@ Jelly-Claude is a launch wrapper for [Claude Code](https://github.com/anthropics
 - Includes `CLAUDE.md` — session memory that pre-loads wallet paths, skill locations, and protocol reference so Claude starts every session already oriented
 - Includes `torq.sh` — token-optimised launch mode using the highest-performance free models on OpenRouter
 
+
+## Project donation Wallet 
+
+BNB: 0xDd81Fe5404a1bF0c8b66EBC3205684c3eF5Ed17B
+
+
+SOL: FuYxmffq2gYfLZ3WAsedqtmBtxLkA4XDcscnk9oTqV1C
+
 ---
 
 ## Prerequisites
