@@ -249,6 +249,77 @@ See [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/
 
 ---
 
+---
+
+## Modules (v2)
+
+Run any module directly from the command line — no Claude session needed.
+
+```bash
+# Predict a signal (Jelly Score 0–100)
+node modules/market/run.mjs predict --text "Solana TVL surge breakout" --chain solana
+
+# Scan new tokens on BNB Chain
+node modules/scanner/run.mjs newTokens --chain bsc --maxAge 30
+
+# Check top Polymarket markets, scored with Jelly Score
+node modules/prediction-markets/run.mjs polymarkets --limit 10
+
+# Cross-platform arbitrage detection
+node modules/prediction-markets/run.mjs arbitrage --query "BTC"
+
+# Portfolio snapshot
+node modules/portfolio/run.mjs snapshot --solana <your-solana-address>
+
+# DeFi yield search
+node modules/defi/run.mjs yields --chain solana --minApy 20
+
+# Bridge route comparison
+node modules/bridge/run.mjs fees --fromChain 1 --toChain 56 --fromToken 0x... --toToken 0x... --fromAmount 1000000
+
+# Alert status
+node modules/alerts/run.mjs status
+
+# Backtest prediction engine
+node modules/market/run.mjs backtest --scenarios '[{"signal":"bullish","chain":"solana","actualReturn":1.5}]'
+```
+
+All 9 modules: `market`, `portfolio`, `scanner`, `alerts`, `analytics`, `prediction-markets`, `wallet`, `defi`, `bridge`
+
+---
+
+## AI Agents (v2)
+
+9 built-in agents used by the SDK pipeline and callable from Claude Code:
+
+| Agent | Purpose |
+|-------|---------|
+| `predictor` | Jelly Score engine — score any signal |
+| `scanner` | New token pair discovery with volume spike detection |
+| `monitor` | Wallet balance monitoring with threshold alerts |
+| `signal-hunter` | Automatic DeFi signal scanning across protocols |
+| `risk-guard` | Hard limit + Jelly Score risk gate |
+| `arbitrage` | Cross-platform prediction market price gap finder |
+| `alert-dispatcher` | Dedup, severity filter, desktop notification routing |
+| `backtest` | Replay historical signal→outcome data against prediction engine |
+| `portfolio` | Multi-chain portfolio snapshot and P&L tracking |
+
+---
+
+## Core Config
+
+| File | Purpose |
+|------|---------|
+| `config/strategies.json` | Jelly Score → position size mapping |
+| `config/risk-profiles.json` | `conservative`, `balanced`, `aggressive` profiles |
+| `config/chains.json` | RPC endpoints for all 7 chains |
+| `config/thresholds.json` | Volume spike / TVL shock / price move alert thresholds |
+| `config/keywords.json` | Bullish / bearish / high-priority keyword lists |
+| `config/providers.json` | API base URLs for all data providers |
+| `config/torq.json` | TORQ mode model selection |
+
+---
+
 ## Related repos
 
 | Repo | Purpose |

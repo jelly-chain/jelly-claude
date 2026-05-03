@@ -1,0 +1,80 @@
+{
+  "name": "jelly-claude",
+  "version": "2.0.0",
+  "description": "Multi-chain AI agent powered by Claude Code — Solana, BNB, Polygon, Polymarket, Kalshi, predict.fun and more",
+  "type": "module",
+  "author": "jelly-chain",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jelly-chain/jelly-claude.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node jelly-claude.mjs",
+    "proxy": "node proxy.mjs",
+    "health": "node scripts/health-check.mjs",
+    "check": "node scripts/check-deps.mjs",
+    "reset": "node scripts/reset.mjs",
+    "wallet": "node scripts/generate-wallet.mjs",
+    "install-skills": "node scripts/install-skills.mjs",
+    "install-agents": "node scripts/install-agents.mjs",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest tests/ --passWithNoTests",
+    "test:core": "node tests/core.test.mjs",
+    "test:prediction": "node tests/prediction.test.mjs",
+    "test:memory": "node tests/memory.test.mjs",
+    "test:platform": "node tests/platform.test.mjs",
+    "lint": "node --input-type=module -e \"import('./scripts/check-deps.mjs')\"",
+    "market": "node modules/market/run.mjs",
+    "portfolio": "node modules/portfolio/run.mjs",
+    "scanner": "node modules/scanner/run.mjs",
+    "alerts": "node modules/alerts/run.mjs",
+    "analytics": "node modules/analytics/run.mjs",
+    "prediction-markets": "node modules/prediction-markets/run.mjs",
+    "wallet-ops": "node modules/wallet/run.mjs",
+    "defi": "node modules/defi/run.mjs",
+    "bridge": "node modules/bridge/run.mjs"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "ethers": "^6.13.4",
+    "bs58": "^6.0.0",
+    "dotenv": "^16.4.7",
+    "node-fetch": "^3.3.2",
+    "ws": "^8.18.0",
+    "eventemitter3": "^5.0.1",
+    "lru-cache": "^11.0.2",
+    "p-queue": "^8.0.1",
+    "p-retry": "^6.2.1",
+    "p-timeout": "^6.1.4",
+    "chalk": "^5.4.1",
+    "ora": "^8.1.1",
+    "inquirer": "^12.3.2",
+    "conf": "^13.0.1",
+    "boxen": "^8.0.1",
+    "table": "^6.9.0",
+    "cli-progress": "^3.12.0",
+    "dayjs": "^1.11.13",
+    "decimal.js": "^10.5.0",
+    "bignumber.js": "^9.1.2",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10"
+  },
+  "keywords": [
+    "claude",
+    "ai",
+    "agent",
+    "solana",
+    "bnb",
+    "polymarket",
+    "kalshi",
+    "prediction-markets",
+    "defi",
+    "trading"
+  ]
+}

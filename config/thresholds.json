@@ -1,0 +1,37 @@
+{
+  "volume": {
+    "spikeMultiplier": 3,
+    "minVolumeUsd": 50000,
+    "alertVolumeUsd": 500000,
+    "whaleTradeUsd": 10000
+  },
+  "tvl": {
+    "shockPct": 20,
+    "growthAlertPct": 15,
+    "minTvlUsd": 1000000
+  },
+  "price": {
+    "movementAlertPct": 5,
+    "extremeMoveAlertPct": 15,
+    "priceImpactMax": 2
+  },
+  "prediction_markets": {
+    "priceMispricingMin": 0.05,
+    "jellyScoreExecute": 60,
+    "jellyScoreFullSize": 80,
+    "maxSpreadPct": 3
+  },
+  "bridge": {
+    "anomalyMultiplier": 5,
+    "minBridgeAmountUsd": 100000
+  },
+  "wallet": {
+    "watchThresholdUsd": 5000,
+    "whaleDefinitionUsd": 100000
+  },
+  "defi": {
+    "apyAlertMin": 20,
+    "liquidityMinUsd": 100000,
+    "slippageMax": 3
+  }
+}

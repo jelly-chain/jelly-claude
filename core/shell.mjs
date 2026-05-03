@@ -1,13 +1,20 @@
 import { spawn } from 'node:child_process';
-import { promisify } from 'node:util';
+import { platform } from 'node:os';
+import { SHELL } from './platform.mjs';
 
-export async function sh(cmd, { cwd = process.cwd(), timeoutMs = 30000, shell = '/bin/zsh' } = {}) {
+const _isWin = platform() === 'win32';
+
+export async function sh(cmd, { cwd = process.cwd(), timeoutMs = 30000, shell } = {}) {
+  const sh  = shell ?? SHELL.bin;
+  const arg = _isWin ? '/c' : '-c';
+
   return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => p.kill('SIGTERM'), timeoutMs);
-    const p = spawn(shell, ['-c', cmd], { 
+    const timer = setTimeout(() => p.kill(_isWin ? undefined : 'SIGTERM'), timeoutMs);
+    const p = spawn(sh, [arg, cmd], { 
       cwd, 
       stdio: ['pipe', 'pipe', 'pipe'],
-      timeout: timeoutMs 
+      timeout: timeoutMs,
+      shell: false,
     });
     
     let stdout = '', stderr = '';

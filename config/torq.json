@@ -1,0 +1,19 @@
+{
+  "description": "TORQ mode — token-optimised model selection for maximum performance per token",
+  "openrouter": {
+    "opus":   "google/gemma-4-31b-it:free",
+    "sonnet": "arcee-ai/trinity-large-preview:free",
+    "haiku":  "nvidia/nemotron-3-super-120b-a12b",
+    "subagent": "nvidia/nemotron-3-super-120b-a12b:free"
+  },
+  "anthropic": {
+    "opus":    "claude-opus-4-5",
+    "sonnet":  "claude-sonnet-4-5",
+    "haiku":   "claude-haiku-3-5",
+    "subagent": "claude-haiku-3-5"
+  },
+  "proxyPort": 7788,
+  "maxTokensPerRequest": 8192,
+  "temperature": 0.3,
+  "systemCachingEnabled": true
+}

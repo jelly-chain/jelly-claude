@@ -1,0 +1,69 @@
+{
+  "dexscreener": {
+    "baseUrl": "https://api.dexscreener.com/latest",
+    "pairsUrl": "https://api.dexscreener.com/latest/dex/pairs",
+    "searchUrl": "https://api.dexscreener.com/latest/dex/search",
+    "tokenUrl": "https://api.dexscreener.com/latest/dex/tokens",
+    "rateLimit": 300,
+    "requiresKey": false
+  },
+  "birdeye": {
+    "baseUrl": "https://public-api.birdeye.so",
+    "rateLimit": 100,
+    "requiresKey": true,
+    "keyEnv": "BIRDEYE_API_KEY"
+  },
+  "helius": {
+    "baseUrl": "https://mainnet.helius-rpc.com",
+    "apiUrl": "https://api.helius.xyz/v0",
+    "rateLimit": 50,
+    "requiresKey": true,
+    "keyEnv": "HELIUS_API_KEY"
+  },
+  "polymarket": {
+    "baseUrl": "https://clob.polymarket.com",
+    "gammaUrl": "https://gamma-api.polymarket.com",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "POLYMARKET_API_KEY"
+  },
+  "kalshi": {
+    "baseUrl": "https://trading-api.kalshi.com/trade-api/v2",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "KALSHI_API_KEY"
+  },
+  "predictFun": {
+    "baseUrl": "https://api.predict.fun",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "PREDICT_API_KEY"
+  },
+  "jellychain": {
+    "baseUrl": "https://api.jellychain.fun",
+    "rateLimit": 120,
+    "requiresKey": false
+  },
+  "jupiter": {
+    "baseUrl": "https://quote-api.jup.ag/v6",
+    "priceUrl": "https://price.jup.ag/v4",
+    "rateLimit": 100,
+    "requiresKey": false
+  },
+  "hyperliquid": {
+    "baseUrl": "https://api.hyperliquid.xyz",
+    "wsUrl": "wss://api.hyperliquid.xyz/ws",
+    "rateLimit": 100,
+    "requiresKey": false
+  },
+  "llamafi": {
+    "baseUrl": "https://api.llama.fi",
+    "rateLimit": 120,
+    "requiresKey": false
+  },
+  "coingecko": {
+    "baseUrl": "https://api.coingecko.com/api/v3",
+    "rateLimit": 30,
+    "requiresKey": false
+  }
+}

@@ -166,3 +166,46 @@ Each playbook shows exactly which agents to invoke and in what order.
 - Keep at least 30% of BNB Chain funds in a stable USDT position at all times
 - predict.fun market-making is only profitable on liquid markets (orderbook depth > $10K each side)
 - four.meme launches are high-risk — cap total exposure to 10% of BNB Chain allocation
+
+---
+
+## Strategy 9: Automated SDK Signal Pipeline
+
+**Goal:** Use the embedded prediction and signal engine to continuously monitor on-chain data, auto-score opportunities, and hand off to the right agent with zero manual filtering.
+
+**Modules:** `modules/scanner` → `modules/market` → `modules/prediction-markets` → `modules/alerts`
+
+**Steps:**
+1. Start with `modules/scanner` to watch new token pairs on Solana or BNB Chain (volume spike detection runs automatically via `VolumeSpikeDetector`).
+2. For each flagged pair, the `KeywordTrigger` and `ThresholdTrigger` in `core/signals.mjs` fire automatically and call `JellyPredictor.predict()` on the combined signal text.
+3. `RiskAssessor` gates the result: Jelly Score ≥ 80 → full position, 60–79 → half position, < 60 → skip.
+4. `AlertDispatcherAgent` sends a desktop notification and logs the event to `logs/audit.jsonl`.
+5. If a related prediction market exists (use `modules/prediction-markets` to search), the `ArbitrageAgent` checks for cross-platform price gaps ≥ 5%.
+6. Optionally, run `modules/market backtest` on historical signal → outcome pairs to calibrate the Jelly Score threshold for your preferred risk profile.
+
+**Running it:**
+```bash
+# Step 1: scan for anomalies
+node modules/scanner/run.mjs scan --chain solana
+
+# Step 2: score a signal
+node modules/market/run.mjs predict --text "Volume spike 5x Raydium pool surge" --chain solana
+
+# Step 3: find related prediction markets
+node modules/prediction-markets/run.mjs polymarkets --query "Solana TVL"
+
+# Step 4: check for arbitrage
+node modules/prediction-markets/run.mjs arbitrage --query "SOL"
+
+# Step 5: view alert history
+node modules/alerts/run.mjs history --n 20
+
+# Step 6: backtest
+node modules/market/run.mjs backtest --scenarios '[{"signal":"volume spike tvl surge","chain":"solana","actualReturn":1.5},{"signal":"hack exploit rug","chain":"solana","actualReturn":-0.8}]'
+```
+
+**Key rules:**
+- Always run `core/risk.mjs RiskAssessor` before acting on any signal — it enforces your chosen risk profile (`conservative`, `balanced`, or `aggressive`)
+- Change `SDK_RISK_PROFILE` in `.env` to switch profiles without touching code
+- The audit log (`logs/audit.jsonl`) records every prediction, trade, and risk block for review
+- Jelly Score thresholds are configurable in `config/strategies.json` — do not hard-code them in agent prompts
