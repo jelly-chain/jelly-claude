@@ -17,13 +17,6 @@ Jelly-Claude is a launch wrapper for [Claude Code](https://github.com/anthropics
 - Includes `torq.sh` — token-optimised launch mode using the highest-performance free models on OpenRouter
 
 
-## Project donation Wallet 
-
-BNB: 0xDd81Fe5404a1bF0c8b66EBC3205684c3eF5Ed17B
-
-
-SOL: FuYxmffq2gYfLZ3WAsedqtmBtxLkA4XDcscnk9oTqV1C
-
 ---
 
 ## Prerequisites
@@ -245,7 +238,9 @@ Then inside Claude Code:
 /agent pump-launcher
 ```
 
-See [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents) for all templates.
+See [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude/tree/main/Agent-Templates) for all templates.
+See [github.com/jelly-chain/extensions](https://github.com/jelly-chain/jelly-claude/tree/main/Extension-main) for the full EXT list.
+
 
 ---
 
@@ -320,6 +315,15 @@ All 9 modules: `market`, `portfolio`, `scanner`, `alerts`, `analytics`, `predict
 
 ---
 
+## Project donation Wallet 
+
+BNB: 0xDd81Fe5404a1bF0c8b66EBC3205684c3eF5Ed17B
+
+
+SOL: FuYxmffq2gYfLZ3WAsedqtmBtxLkA4XDcscnk9oTqV1C
+
+
+---
 ## Related repos
 
 | Repo | Purpose |
