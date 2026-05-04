@@ -13,6 +13,7 @@ After `setup.sh` / `install-all.sh` runs, all 28 are available automatically.
 
 ---
 
+
 ## binance-skills-hub
 **Chain:** Binance CEX / BNB Chain  
 **Purpose:** Binance market data, spot trading, token security audits, and on-chain analysis — public endpoints require no key; trading requires a Binance API key.  
