@@ -30,6 +30,19 @@ Jelly-Claude is a launch wrapper for [Claude Code](https://github.com/anthropics
 
 ---
 
+
+## Contract Address 
+
+BNB: 0xf581ee357f11d7478fafd183b4a41347c35a4444
+
+SOL: GcUANCt1YZK9L8ap128EMrcbhNMYhHR23Ungwd7ypump
+
+ETH: SOON
+
+BASE: SOON
+
+---
+
 ## Quick Start
 
 ### Mac / Linux
@@ -128,17 +141,7 @@ Base:
 -
 -
 
-
-## Contract Address 
-
-BNB: 0xf581ee357f11d7478fafd183b4a41347c35a4444
-
-SOL: GcUANCt1YZK9L8ap128EMrcbhNMYhHR23Ungwd7ypump
-
-ETH: SOON
-
-BASE: SOON
-
+---
 
 ## What setup.sh does
 
