@@ -9,7 +9,7 @@ Multi-chain AI coding agent for Solana, BNB Chain, Base, Hyperliquid, Polymarket
 | Chain | File |
 |-------|------|
 | Solana | `~/.jelly-claude/wallets/solana.json` |
-| EVM (BNB / Base / Polygon) | `~/.jelly-claude/wallets/evm.json` |
+| EVM (BNB / Base / Polygon - Soon: Arbitrum / Optimism / Sei / Avalanche ) | `~/.jelly-claude/wallets/evm.json` |
 
 Load Solana wallet:
 ```javascript
