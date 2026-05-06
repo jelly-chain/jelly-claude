@@ -1,0 +1,35 @@
+{
+  "name": "jelly-alchemy",
+  "version": "0.1.0",
+  "description": "Alchemy-powered onchain intelligence extension for Jelly Claude — EVM + Solana data plane.",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "alchemy",
+    "evm",
+    "bnb",
+    "ethereum",
+    "polygon",
+    "solana",
+    "nft",
+    "wallet",
+    "jelly-claude",
+    "agent"
+  ],
+  "author": "jelly-chain",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "vitest": "^1.0.0"
+  }
+}
