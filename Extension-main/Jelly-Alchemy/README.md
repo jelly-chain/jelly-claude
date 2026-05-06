@@ -99,3 +99,21 @@ extensions/
         ├── tool-reference.md
         ├── prompts.md
         └── webhook-playbooks.md
+
+
+---
+
+## ENV SETTING
+
+ALCHEMY_API_KEY=your_key_here
+
+ALCHEMY_ETH_MAINNET_URL=https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
+ALCHEMY_BNB_MAINNET_URL=https://bnb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
+ALCHEMY_BASE_MAINNET_URL=https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
+ALCHEMY_ARB_MAINNET_URL=https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
+ALCHEMY_POLYGON_MAINNET_URL=https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
+ALCHEMY_OPBNB_MAINNET_URL=https://opbnb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
+ALCHEMY_SOLANA_MAINNET_URL=https://solana-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
+
+
+---
