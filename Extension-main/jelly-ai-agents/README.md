@@ -20,6 +20,8 @@ Inside Claude Code:
 /agent gpt-coder
 /agent image-generator
 /agent model-router
+/agent FIFA
+/agent Sports
 ```
 
 ---
