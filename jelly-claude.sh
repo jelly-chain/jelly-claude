@@ -78,7 +78,7 @@ s.on('error', () => { s.destroy(); process.exit(1); });
   export ANTHROPIC_API_KEY="$OPENROUTER_API_KEY"
   export ANTHROPIC_BASE_URL="http://127.0.0.1:7788"
   export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek/deepseek-v4-pro"
-  export ANTHROPIC_DEFAULT_SONNET_MODEL="nvidia/nemotron-3-nano-30b-a3b"
+  export ANTHROPIC_DEFAULT_SONNET_MODEL="x-ai/grok-4.3"
   export ANTHROPIC_DEFAULT_HAIKU_MODEL="nvidia/nemotron-3-nano-30b-a3b:exacto"
   export CLAUDE_CODE_SUBAGENT_MODEL="qwen/qwen3-next-80b-a3b-thinking"
 
