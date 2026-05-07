@@ -77,10 +77,10 @@ s.on('error', () => { s.destroy(); process.exit(1); });
   # ── Model tiers ──────────────────────────────────────────────────────────
   export ANTHROPIC_API_KEY="$OPENROUTER_API_KEY"
   export ANTHROPIC_BASE_URL="http://127.0.0.1:7788"
-  export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek/deepseek-r1:free"
-  export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek/deepseek-chat:free"
-  export ANTHROPIC_DEFAULT_HAIKU_MODEL="meta-llama/llama-3.3-70b-instruct:free"
-  export CLAUDE_CODE_SUBAGENT_MODEL="google/gemma-2-9b-it:free"
+  export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek/deepseek-v4-pro"
+  export ANTHROPIC_DEFAULT_SONNET_MODEL="nvidia/nemotron-3-nano-30b-a3b"
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL="nvidia/nemotron-3-nano-30b-a3b:exacto"
+  export CLAUDE_CODE_SUBAGENT_MODEL="qwen/qwen3-next-80b-a3b-thinking"
 
   # Run claude as a child process (not exec) so the EXIT trap fires on completion
   # and reliably kills the proxy regardless of how claude exits.
