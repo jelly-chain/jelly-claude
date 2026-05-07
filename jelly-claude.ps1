@@ -83,7 +83,7 @@ if ($AnthropicKey) {
     $env:ANTHROPIC_API_KEY              = $OpenRouterKey
     $env:ANTHROPIC_BASE_URL             = "http://127.0.0.1:7788"
     $env:ANTHROPIC_DEFAULT_OPUS_MODEL   = "deepseek/deepseek-r1:free"
-    $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "deepseek/deepseek-chat:free"
+    $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "x-ai/grok-4.3"
     $env:ANTHROPIC_DEFAULT_HAIKU_MODEL  = "meta-llama/llama-3.3-70b-instruct:free"
     $env:CLAUDE_CODE_SUBAGENT_MODEL     = "google/gemma-2-9b-it:free"
 
