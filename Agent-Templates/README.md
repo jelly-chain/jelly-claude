@@ -1,6 +1,6 @@
 # Jelly-Claude Agents
 
-> 27 ready-to-use agent templates for the Jelly-Claude multi-chain AI agent framework.
+> 37 ready-to-use agent templates for the Jelly-Claude multi-chain AI agent framework.
 
 **GitHub:** [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents)
 
@@ -37,7 +37,7 @@ Inside Claude Code:
 
 ---
 
-## Agent list (27 agents)
+## Agent list (37 agents)
 
 ### Prediction Markets
 | Agent | Description |
@@ -45,6 +45,15 @@ Inside Claude Code:
 | `polymarket-trader` | Browse, analyze, and trade Polymarket prediction markets on Polygon |
 | `kalshi-trader` | Browse, analyze, and trade Kalshi binary contracts (US regulated) |
 | `jelly-predictions-agent` | Cross-reference jellychain.fun on-chain data with Polymarket and Kalshi markets |
+
+### Prediction Intelligence
+| Agent | Description |
+|-------|-------------|
+| `jelly-score-optimizer` | Full JellyScore pipeline: keyword + on-chain + cross-market → YES/NO recommendation |
+| `cross-market-arb-hunter` | Find price divergences across Polymarket, Kalshi, and predict.fun simultaneously |
+| `sentiment-tracker` | Aggregate social signals and overlay net sentiment on current YES/NO prices |
+| `event-risk-scorer` | Enumerate risk factors and produce a Jelly Risk Score (0–100) before any trade |
+| `kalshi-polymarket-spreader` | Kalshi ↔ Polymarket arb with full fee model and collateral-type handling |
 
 ### Solana DeFi
 | Agent | Description |
@@ -75,6 +84,19 @@ Inside Claude Code:
 | `token-security-auditor` | Honeypot checks, holder concentration, contract analysis |
 | `birdeye-analyst` | Trending tokens, holder analysis, top traders, and wallet P&L via Birdeye |
 | `dexscreener-scanner` | Discover new pairs, filter by liquidity/volume/age, monitor price moves |
+
+### On-Chain Signal
+| Agent | Description |
+|-------|-------------|
+| `whale-signal-predictor` | Watch whale wallets via Helius; fire JellyScore re-evaluation on large moves |
+| `defi-tvl-predictor` | Track DeFiLlama TVL momentum as a leading indicator for ecosystem markets |
+| `solana-flow-analyst` | Net accumulation vs. distribution on any SPL token using Helius enhanced transactions |
+
+### Portfolio & Risk
+| Agent | Description |
+|-------|-------------|
+| `multi-chain-risk-dashboard` | Aggregate all prediction + DeFi positions into one risk view with VaR and concentration flags |
+| `auto-hedge-suggester` | Suggest cost-effective hedges to reduce net delta exposure below a configurable threshold |
 
 ### Infrastructure & Utility
 | Agent | Description |
