@@ -103,23 +103,30 @@ Agents are at `~/.claude/agents/<agent-name>.md`. Invoke inside Claude Code with
 /agent <agent-name>
 ```
 
-All 28 agents:
+All 37 agents:
 | Agent | Use case |
 |-------|----------|
 | `airdrop-hunter` | Find and claim Solana airdrops |
+| `auto-hedge-suggester` | Suggest hedges to reduce net delta exposure |
 | `base-dex-trader` | Swaps on Base (Aerodrome, Uniswap V3) |
 | `birdeye-analyst` | Token analytics and signals |
 | `bnb-data-fetcher` | BNB Chain on-chain data queries |
 | `bnb-dex-trader` | PancakeSwap and BNB DEX trading |
 | `cross-chain-bridge` | Bridge assets between chains |
+| `cross-market-arb-hunter` | Arb across Polymarket, Kalshi, and predict.fun |
+| `defi-tvl-predictor` | TVL momentum → prediction market edge |
 | `dexscreener-scanner` | New token pair discovery |
+| `event-risk-scorer` | Jelly Risk Score before any prediction trade |
 | `four-meme-launcher` | Launch meme tokens on four.meme (BSC) |
 | `hyperliquid-trader` | Perps on Hyperliquid |
 | `jelly-predictions-agent` | On-chain data → Polymarket/Kalshi signals |
+| `jelly-score-optimizer` | Full JellyScore pipeline → YES/NO recommendation |
 | `jupiter-trader` | Solana swaps and DCA |
+| `kalshi-polymarket-spreader` | Kalshi ↔ Polymarket arb with full fee model |
 | `kalshi-trader` | Kalshi binary bets (fiat) |
 | `meteora-launcher` | Solana DLMM liquidity provisioning |
 | `mev-arbitrage` | Solana MEV and arbitrage |
+| `multi-chain-risk-dashboard` | All-platform risk dashboard with VaR |
 | `multisig-manager` | Solana multisig (Squads) |
 | `nft-minter` | Mint NFTs with Metaplex |
 | `on-chain-analyst` | On-chain data analysis |
@@ -130,9 +137,12 @@ All 28 agents:
 | `prediction-market-monitor` | Monitor prediction market prices |
 | `pump-launcher` | Launch tokens on pump.fun |
 | `raydium-lp` | Raydium AMM/CLMM liquidity |
+| `sentiment-tracker` | Social sentiment vs. market price divergence |
 | `solana-data-fetcher` | Solana on-chain data queries |
+| `solana-flow-analyst` | SPL token net accumulation vs. distribution |
 | `token-security-auditor` | Rug-pull and honeypot detection |
 | `wallet-watcher` | Whale wallet monitoring |
+| `whale-signal-predictor` | Whale move → JellyScore re-evaluation |
 | `yield-optimizer` | DeFi yield optimization |
 
 For full descriptions, required skills/keys, and example prompts → see `AGENTS.md` in this directory.

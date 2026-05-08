@@ -1,4 +1,4 @@
-# Jelly-Claude — Agents Reference (28 agents)
+# Jelly-Claude — Agents Reference (37 agents)
 
 Agents are installed at `~/.claude/agents/<agent-name>.md`.  
 Invoke inside Claude Code with `/agent <agent-name>`.
@@ -13,6 +13,18 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 - "Check if my wallet is eligible for any current Solana airdrops"
 - "Claim the JTO airdrop for my wallet"
 - "What airdrops are active right now?"
+
+---
+
+## auto-hedge-suggester
+**Purpose:** Suggests hedging trades — opposite positions on correlated markets or DeFi-based hedges — to reduce net portfolio delta exposure below a configurable threshold (default: 3% of portfolio).  
+**Required skills:** `polymarket-skill`, `kalshi-skill`, `predict-fun-skill`, `prediction-skill`, `jupiter-skill`, `solana-wallet-skill`  
+**Required keys:** `POLYMARKET_API_KEY`, `KALSHI_API_KEY`, `PREDICT_API_KEY`, `EVM_PRIVATE_KEY`, Solana wallet  
+**Example prompts:**
+- "Suggest hedges for my current Polymarket and Kalshi positions"
+- "My net delta on BTC price markets is too high — how do I hedge it cheaply?"
+- "Find the most cost-effective way to reduce my exposure to the Fed rate decision market"
+- "Run a full hedge analysis and propose the minimum trades to bring all deltas below 3%"
 
 ---
 
@@ -71,6 +83,29 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 
 ---
 
+## cross-market-arb-hunter
+**Purpose:** Monitors the same event simultaneously across Polymarket, Kalshi, and predict.fun. Flags price divergences above a configurable threshold and suggests the highest-EV trade direction, computing net spread after all platform fees.  
+**Required skills:** `polymarket-skill`, `kalshi-skill`, `predict-fun-skill`, `prediction-skill`  
+**Required keys:** `POLYMARKET_API_KEY`, `KALSHI_API_KEY`, `PREDICT_API_KEY`, `EVM_PRIVATE_KEY`  
+**Example prompts:**
+- "Find arb opportunities between Polymarket and Kalshi on the next Fed rate decision"
+- "Scan all three platforms for BTC price markets expiring this month"
+- "Alert me when any market pair has a net spread above 4%"
+- "Is there a profitable arb on the 2026 US election markets?"
+
+---
+
+## defi-tvl-predictor
+**Purpose:** Tracks DeFiLlama TVL changes on key protocols and uses TVL momentum as a leading indicator for "DeFi ecosystem" prediction markets on Polymarket and Kalshi.  
+**Required skills:** `jelly-skill`, `prediction-skill`, `polymarket-skill`, `kalshi-skill`  
+**Required keys:** `POLYMARKET_API_KEY`, `KALSHI_API_KEY`  
+**Example prompts:**
+- "What's the TVL momentum for Solana this week and how does it affect Polymarket markets?"
+- "Check if Aave TVL is bullish and overlay on any Kalshi DeFi markets"
+- "Show me protocols with the highest TVL gains in 24h and map them to prediction markets"
+
+---
+
 ## dexscreener-scanner
 **Purpose:** New token pair discovery and screening — recently launched pairs, volume surges, trending tokens, rug indicators.  
 **Required skills:** `dexscreener-skill`  
@@ -79,6 +114,17 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 - "Show me the newest token launches on Solana in the last 30 minutes"
 - "Find pairs on BNB Chain with volume over $500K in the last hour"
 - "Scan for trending new tokens and flag any with honeypot risk"
+
+---
+
+## event-risk-scorer
+**Purpose:** Given any upcoming event (election, Fed meeting, sports match, protocol upgrade), enumerates risk factors and produces a structured risk report with a Jelly Risk Score (0–100). Designed to precede any prediction market trade.  
+**Required skills:** `prediction-skill`, `polymarket-skill`, `kalshi-skill`, `jelly-skill`  
+**Required keys:** `POLYMARKET_API_KEY`, `KALSHI_API_KEY`  
+**Example prompts:**
+- "Score the risk for betting on the next Fed rate decision"
+- "Risk report for the next US election prediction market"
+- "How risky is the BTC $100K market on Kalshi before I trade?"
 
 ---
 
@@ -115,6 +161,18 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 
 ---
 
+## jelly-score-optimizer
+**Purpose:** Takes a market question and runs it through the full JellyScore pipeline: keyword scoring, on-chain volume check, cross-market price comparison, risk assessment. Returns a structured YES/NO recommendation with Jelly Score (0–100) and confidence tier.  
+**Required skills:** `prediction-skill`, `polymarket-skill`, `kalshi-skill`, `jelly-skill`  
+**Required keys:** `POLYMARKET_API_KEY`, `KALSHI_API_KEY`  
+**Example prompts:**
+- "Score this market: Will ETH reach $5,000 by end of 2025?"
+- "Run a Jelly Score on the Fed rate cut market on Kalshi"
+- "Analyze Polymarket market ID 0xabc123 and give me a full conviction report"
+- "Is there arbitrage between Polymarket and Kalshi on the BTC price market?"
+
+---
+
 ## jupiter-trader
 **Purpose:** Token swaps, DCA, and limit orders on Solana via Jupiter aggregator — best route execution, price impact checks.  
 **Required skills:** `jupiter-skill`, `solana-wallet-skill`  
@@ -123,6 +181,17 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 - "Swap 1 SOL for USDC via Jupiter"
 - "Set up a DCA to buy $50 of JUP every day for 30 days"
 - "Place a limit order to buy SOL at $120"
+
+---
+
+## kalshi-polymarket-spreader
+**Purpose:** Specialised cross-market arbitrage agent for Kalshi ↔ Polymarket pairs. Handles different collateral types (USD vs USDC) and fee structures to compute true net arbitrage after all costs.  
+**Required skills:** `kalshi-skill`, `polymarket-skill`, `prediction-skill`  
+**Required keys:** `KALSHI_API_KEY`, `KALSHI_API_SECRET`, `POLYMARKET_API_KEY`, `POLYMARKET_SECRET`, `POLYMARKET_PASSPHRASE`, `EVM_PRIVATE_KEY`  
+**Example prompts:**
+- "Find Kalshi↔Polymarket arb on the Fed rate decision next month"
+- "Is there a profitable spread between Kalshi and Polymarket on the 2026 election?"
+- "Show me all Kalshi markets with a Polymarket equivalent and net spread > 3%"
 
 ---
 
@@ -156,6 +225,17 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 - "Find current arbitrage opportunities between Raydium and Orca for SOL/USDC"
 - "What's the current Jito tip cost for priority transactions?"
 - "Construct an arb transaction for the price gap on TOKEN/USDC"
+
+---
+
+## multi-chain-risk-dashboard
+**Purpose:** Aggregates all open prediction market positions (Polymarket, Kalshi, predict.fun) and DeFi positions (Raydium, Meteora, Orca) into a single risk dashboard showing total exposure, VaR estimate, and concentration warnings.  
+**Required skills:** `polymarket-skill`, `kalshi-skill`, `predict-fun-skill`, `solana-wallet-skill`, `bnb-wallet-skill`, `birdeye-skill`, `prediction-skill`  
+**Required keys:** `POLYMARKET_API_KEY`, `KALSHI_API_KEY`, `PREDICT_API_KEY`, `HELIUS_API_KEY`, `BIRDEYE_API_KEY`, `EVM_PRIVATE_KEY`, Solana wallet  
+**Example prompts:**
+- "Show me my full risk dashboard across all prediction and DeFi platforms"
+- "What's my total exposure right now and am I over the concentration limits?"
+- "Which of my positions are correlated with each other?"
 
 ---
 
@@ -269,6 +349,17 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 
 ---
 
+## sentiment-tracker
+**Purpose:** Aggregates social signals (news, Twitter/X, Reddit) for a prediction market topic. Scores net sentiment (−100 to +100) and overlays it on current YES/NO prices to identify divergence between crowd sentiment and market price.  
+**Required skills:** `prediction-skill`, `polymarket-skill`, `kalshi-skill`  
+**Required keys:** `POLYMARKET_API_KEY`, `KALSHI_API_KEY`  
+**Example prompts:**
+- "Track sentiment for 'Federal Reserve rate cut' and overlay on Kalshi market"
+- "What's the social sentiment for Solana price markets right now?"
+- "Is there a sentiment divergence on the BTC ETF approval market?"
+
+---
+
 ## solana-data-fetcher
 **Purpose:** Solana on-chain data queries — account info, transaction parsing, token holder counts, program state, historical data via Helius.  
 **Required skills:** `helius-skill`, `solana-wallet-skill`  
@@ -277,6 +368,17 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 - "Parse the last 10 transactions for this Solana address"
 - "How many holders does this SPL token have?"
 - "Fetch the current state of this Anchor program account"
+
+---
+
+## solana-flow-analyst
+**Purpose:** Real-time token flow analysis on Solana — identifies net accumulation vs. distribution on any SPL token over a rolling window using Helius enhanced transactions API. Produces a Flow Score (0–100) used as a Jelly Score signal component.  
+**Required skills:** `helius-skill`, `birdeye-skill`, `prediction-skill`, `solana-wallet-skill`  
+**Required keys:** `HELIUS_API_KEY`, `BIRDEYE_API_KEY`  
+**Example prompts:**
+- "Analyze the last 24h flow for SOL and tell me if whales are accumulating"
+- "Is JUP seeing exchange inflows right now? Is there sell pressure?"
+- "Flow analysis for BONK over the last 4 hours — smart money or retail?"
 
 ---
 
@@ -299,6 +401,17 @@ Invoke inside Claude Code with `/agent <agent-name>`.
 - "Watch this whale wallet and tell me every time they make a trade over $10K"
 - "What did this wallet buy in the last 24 hours?"
 - "Find the top Solana wallets holding JUP and show their recent activity"
+
+---
+
+## whale-signal-predictor
+**Purpose:** Watches configured whale wallets via Helius; when a whale enters a large position on a token correlated with a prediction market event, fires a JellyScore re-evaluation and produces a structured signal alert.  
+**Required skills:** `helius-skill`, `prediction-skill`, `birdeye-skill`, `jelly-skill`  
+**Required keys:** `HELIUS_API_KEY`, `BIRDEYE_API_KEY`, Solana wallet (read-only)  
+**Example prompts:**
+- "Monitor these whale wallets and alert me on any SOL/JUP move over $100K"
+- "Who are the top 10 most profitable Solana wallets trading JUP right now?"
+- "A whale just bought $500K of SOL — which prediction markets are correlated?"
 
 ---
 

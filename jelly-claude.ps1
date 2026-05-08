@@ -37,6 +37,13 @@ if (Test-Path $EnvFile) {
 $AnthropicKey  = [System.Environment]::GetEnvironmentVariable("ANTHROPIC_API_KEY",  "Process")
 $OpenRouterKey = [System.Environment]::GetEnvironmentVariable("OPENROUTER_API_KEY", "Process")
 
+# ── Telegram bridge mode — delegate entirely to jelly-claude.mjs ─────────────
+# jelly-claude.mjs handles proxy setup + TG bridge in a single Node.js process.
+if ($args -contains '--telegram') {
+    & node (Join-Path $ScriptDir "jelly-claude.mjs") @args
+    exit $LASTEXITCODE
+}
+
 # ── Check which key is available ─────────────────────────────────────────────
 if ($AnthropicKey) {
     Write-Host ""

@@ -220,3 +220,38 @@ Free tier models have strict rate limits.
 - Add delays between requests
 - Upgrade to a paid OpenRouter plan
 - Switch to `ANTHROPIC_API_KEY` for unlimited-rate paid access
+
+---
+
+## Telegram Interface
+
+### `--telegram requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID`
+Both values must be set in `.env` before using the Telegram flag.
+- Create a bot via **@BotFather** on Telegram and copy the token it provides
+- Message **@userinfobot** to find your numeric chat ID
+```
+TELEGRAM_BOT_TOKEN=123456789:AAExampleTokenFromBotFather
+TELEGRAM_CHAT_ID=987654321
+```
+
+### Bot does not respond to messages
+1. Confirm your `TELEGRAM_CHAT_ID` matches the ID reported by **@userinfobot** — it must be exact
+2. Make sure `jelly-claude.sh --telegram` (or `jelly-claude.mjs --telegram`) is still running — check your terminal for errors
+3. The bot only accepts messages from the one configured `TELEGRAM_CHAT_ID`; all others are silently rejected
+
+### `Unauthorized` reply from the bot
+You are messaging from a different account or group than the one in `TELEGRAM_CHAT_ID`. Only the configured chat ID can interact with the bot.
+
+### Bot keeps saying "reconnecting…"
+The Telegram polling connection dropped. The bridge retries automatically up to 5 times with exponential backoff (1 s → 16 s). If all retries fail:
+- Check your internet connection on the machine running Jelly-Claude
+- Verify `TELEGRAM_BOT_TOKEN` has not been revoked (use `/token` with @BotFather to regenerate if needed)
+- Restart `bash jelly-claude.sh --telegram`
+
+### Messages are cut off or missing
+Telegram has a 4 096-character limit per message. Jelly-Claude automatically splits long responses into multiple messages. If a chunk is still failing:
+- Check the terminal running Jelly-Claude for `sendMessage` errors
+- Ensure the bot token is valid and the bot has not been blocked by the user
+
+### Claude output has garbled characters in Telegram
+Claude Code uses ANSI colour codes for its terminal output. The bridge strips these automatically. If you still see escape sequences (`\x1B[...`), please report the exact output so the strip regex can be updated.

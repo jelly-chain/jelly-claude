@@ -365,16 +365,57 @@ predictor.setSentimentHook(async (input) => {
 
 ---
 
-## Telegram Notifications
+## Telegram Interface
 
-Add your Telegram bot token and chat ID to `.env`:
+Control and monitor Jelly-Claude remotely from any Telegram client.
+
+### 1. Create a bot
+
+Open Telegram and message **@BotFather**:
+```
+/newbot
+```
+Copy the token it gives you — that's your `TELEGRAM_BOT_TOKEN`.
+
+### 2. Find your chat ID
+
+Message **@userinfobot** on Telegram. It replies with your numeric ID — that's your `TELEGRAM_CHAT_ID`.
+
+### 3. Add both to `.env`
 
 ```
-TELEGRAM_BOT_TOKEN=  # Create a bot via @BotFather on Telegram
-TELEGRAM_CHAT_ID=    # Find your chat ID via @userinfobot
+TELEGRAM_BOT_TOKEN=123456789:AAExampleTokenFromBotFather
+TELEGRAM_CHAT_ID=987654321
 ```
 
-The Telegram interface will be available in the next release (`jelly-telegram.mjs`).
+### 4. Launch with the Telegram flag
+
+```bash
+# Mac / Linux
+bash jelly-claude.sh --telegram
+
+# Windows (PowerShell)
+.\jelly-claude.ps1 --telegram
+
+# Or directly via Node
+node jelly-claude.mjs --telegram
+```
+
+### Bot commands
+
+| Command | What it does |
+|---------|-------------|
+| `/status` | Show current mode, models, and uptime |
+| `/stop` | Gracefully shut down Jelly-Claude |
+| *(any other text)* | Forwarded to Claude Code as input |
+
+### Security
+
+Only messages from the configured `TELEGRAM_CHAT_ID` are accepted. Any other user messaging your bot receives an "Unauthorized" reply and is ignored.
+
+### Reconnection
+
+If the Telegram connection drops, the bridge automatically retries with exponential backoff (1 s → 2 s → 4 s → 8 s → 16 s, up to 5 attempts). You will receive a reconnecting notice in Telegram if this happens.
 
 ---
 

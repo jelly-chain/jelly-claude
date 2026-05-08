@@ -45,6 +45,15 @@ else
   echo ""
 fi
 
+# ── Telegram bridge mode — delegate entirely to jelly-claude.mjs ─────────────
+# jelly-claude.mjs handles proxy setup + TG bridge in a single Node.js process.
+for _arg in "$@"; do
+  if [[ "$_arg" == "--telegram" ]]; then
+    exec node "$SCRIPT_DIR/jelly-claude.mjs" "$@"
+  fi
+done
+unset _arg
+
 # ── Check which key is available ─────────────────────────────────────────────
 if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
   _jelly_splash "anthropic"
