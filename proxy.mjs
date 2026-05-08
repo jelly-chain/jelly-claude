@@ -3,8 +3,9 @@
 import http from 'http';
 import https from 'https';
 import { URL } from 'url';
+import { ensurePortFree } from './core/proxy-guard.mjs';
 
-const PORT = process.env.PROXY_PORT || 7788;
+const PORT = parseInt(process.env.PROXY_PORT || '7788', 10);
 const TARGET = 'https://openrouter.ai';
 const DEBUG = process.env.PROXY_DEBUG === '1';
 
@@ -88,6 +89,15 @@ const server = http.createServer((req, res) => {
     proxyReq.end();
   });
 });
+
+const guard = await ensurePortFree(PORT);
+if (!guard.ok) {
+  console.error(`[proxy] ${guard.message}`);
+  process.exit(1);
+}
+if (guard.action === 'killed') {
+  console.log(`[proxy] Cleared stale process on port ${PORT}`);
+}
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Proxy listening on http://127.0.0.1:${PORT} → ${TARGET}`);

@@ -5,10 +5,32 @@
 
 $ErrorActionPreference = "Stop"
 
+# ── Execution policy check ────────────────────────────────────────────────────
+$policy = Get-ExecutionPolicy -Scope CurrentUser
+if ($policy -eq "Restricted" -or $policy -eq "Undefined") {
+    Write-Host ""
+    Write-Host "  Your PowerShell execution policy is '$policy'." -ForegroundColor Yellow
+    Write-Host "  setup.ps1 needs to set it to RemoteSigned for the current user only." -ForegroundColor Yellow
+    $consent = Read-Host "  Apply 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned'? [Y/n]"
+    if ($consent -eq '' -or $consent -match '^[Yy]') {
+        try {
+            Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+            Write-Host "  + Execution policy updated to RemoteSigned." -ForegroundColor Green
+        } catch {
+            Write-Host "  X Could not set execution policy: $_" -ForegroundColor Red
+            Write-Host "    Run manually: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned"
+            exit 1
+        }
+    } else {
+        Write-Host "  Skipped. You may need to set it manually before scripts can run." -ForegroundColor Yellow
+    }
+    Write-Host ""
+}
+
 $JellyHome  = Join-Path $env:USERPROFILE ".jelly-claude"
 $WalletsDir = Join-Path $JellyHome "wallets"
 $KeysFile   = Join-Path $JellyHome ".keys"
-$ScriptDir  = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ScriptDir  = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $ParentDir  = Split-Path -Parent $ScriptDir
 
 function Step($msg)  { Write-Host "  > $msg" -ForegroundColor Cyan }
@@ -73,7 +95,7 @@ if (Test-Path $solKeyPath) {
     Ok "Solana wallet already exists: $solAddr"
 } else {
     $walletDirEsc = $WalletsDir.Replace("\", "\\")
-    $solScript = @"
+    $solScriptContent = @"
 const crypto = require('crypto');
 const fs = require('fs');
 const walletDir = '$walletDirEsc';
@@ -94,8 +116,14 @@ for (let i = 0; i < pub32.length && pub32[i] === 0; i++) addr = '1' + addr;
 fs.writeFileSync(pubPath, addr);
 console.log(addr);
 "@
-    $solAddr = node -e $solScript
-    Ok "Solana wallet generated: $solAddr"
+    $solTmpFile = Join-Path $env:TEMP "jelly-sol-$(Get-Random).cjs"
+    try {
+        Set-Content -Path $solTmpFile -Value $solScriptContent -Encoding UTF8
+        $solAddr = & node $solTmpFile
+        Ok "Solana wallet generated: $solAddr"
+    } finally {
+        Remove-Item -Force $solTmpFile -ErrorAction SilentlyContinue
+    }
 }
 
 # ── 8. Generate EVM wallet with real address via ethers.js ───────────────────
@@ -114,7 +142,7 @@ if (Test-Path $evmKeyPath) {
 
     $walletDirEsc = $WalletsDir.Replace("\", "\\")
     $ethersTmpEsc = $ethersTmp.Replace("\", "\\")
-    $evmScript = @"
+    $evmScriptContent = @"
 const { ethers } = require('$ethersTmpEsc/node_modules/ethers');
 const fs = require('fs');
 const walletDir = '$walletDirEsc';
@@ -127,9 +155,15 @@ fs.writeFileSync(walletDir + '/evm.json', JSON.stringify({
 fs.writeFileSync(walletDir + '/evm.pub', wallet.address);
 console.log(wallet.address);
 "@
-    $evmAddr = node -e $evmScript
-    Remove-Item -Recurse -Force $ethersTmp -ErrorAction SilentlyContinue
-    Ok "EVM wallet generated: $evmAddr"
+    $evmTmpFile = Join-Path $env:TEMP "jelly-evm-$(Get-Random).cjs"
+    try {
+        Set-Content -Path $evmTmpFile -Value $evmScriptContent -Encoding UTF8
+        $evmAddr = & node $evmTmpFile
+        Ok "EVM wallet generated: $evmAddr"
+    } finally {
+        Remove-Item -Force $evmTmpFile -ErrorAction SilentlyContinue
+        Remove-Item -Recurse -Force $ethersTmp -ErrorAction SilentlyContinue
+    }
 }
 
 # ── 9. Optional API keys ─────────────────────────────────────────────────────
@@ -184,36 +218,24 @@ Set-Content -Path $KeysFile -Value $keysContent
 Ok "Keys saved to $KeysFile"
 
 # ── 10. Clone & install skills ───────────────────────────────────────────────
-Step "Setting up jelly-claude-skills..."
-$skillsRepo = Join-Path $ParentDir "jelly-claude-skills"
-if (Test-Path (Join-Path $skillsRepo ".git")) {
-    Ok "jelly-claude-skills already cloned — pulling latest..."
-    git -C $skillsRepo pull --quiet 2>&1 | Out-Null
-} elseif (Test-Path $skillsRepo) {
-    Ok "jelly-claude-skills directory found (using as-is)"
-} else {
-    git clone https://github.com/jelly-chain/jelly-claude-skills.git $skillsRepo
-    Ok "jelly-claude-skills cloned"
+# install-skills.mjs handles clone → bundled fallback internally; always run it.
+Step "Installing skills (clone or bundled fallback)..."
+& node (Join-Path $ScriptDir "scripts\install-skills.mjs")
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "  X install-skills.mjs failed (exit code $LASTEXITCODE)" -ForegroundColor Red
+    exit $LASTEXITCODE
 }
-Step "Installing all skills..."
-& (Join-Path $skillsRepo "install-all.ps1")
-Ok "All skills installed"
+Ok "Skills install complete"
 
 # ── 11. Clone & install agent templates ──────────────────────────────────────
-Step "Setting up jelly-claude-agents..."
-$agentsRepo = Join-Path $ParentDir "jelly-claude-agents"
-if (Test-Path (Join-Path $agentsRepo ".git")) {
-    Ok "jelly-claude-agents already cloned — pulling latest..."
-    git -C $agentsRepo pull --quiet 2>&1 | Out-Null
-} elseif (Test-Path $agentsRepo) {
-    Ok "jelly-claude-agents directory found (using as-is)"
-} else {
-    git clone https://github.com/jelly-chain/jelly-claude-agents.git $agentsRepo
-    Ok "jelly-claude-agents cloned"
+# install-agents.mjs handles clone → bundled fallback internally; always run it.
+Step "Installing agent templates (clone or bundled fallback)..."
+& node (Join-Path $ScriptDir "scripts\install-agents.mjs")
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "  X install-agents.mjs failed (exit code $LASTEXITCODE)" -ForegroundColor Red
+    exit $LASTEXITCODE
 }
-Step "Installing all agent templates..."
-& (Join-Path $agentsRepo "install-all.ps1")
-Ok "All agent templates installed"
+Ok "Agent templates install complete"
 
 # ── Summary ──────────────────────────────────────────────────────────────────
 Write-Host ""

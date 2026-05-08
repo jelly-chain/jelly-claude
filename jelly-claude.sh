@@ -9,6 +9,20 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE="$SCRIPT_DIR/.env"
 
+# ── Ink splash helper — forks main.mjs subprocess; silent if ink not installed ─
+_jelly_splash() {
+  # Respect the same gates as core/splash.mjs: non-TTY and opt-out env var
+  [[ -t 1 ]] || return 0
+  [[ "${JELLY_NO_SPLASH:-0}" == "1" ]] && return 0
+  local mode="${1:-none}"
+  JELLY_SPLASH_MODE="$mode" \
+  JELLY_SPLASH_PORT="${JELLY_SPLASH_PORT:-7788}" \
+  JELLY_SPLASH_OPUS="${ANTHROPIC_DEFAULT_OPUS_MODEL:-}" \
+  JELLY_SPLASH_SONNET="${ANTHROPIC_DEFAULT_SONNET_MODEL:-}" \
+  JELLY_SPLASH_HAIKU="${ANTHROPIC_DEFAULT_HAIKU_MODEL:-}" \
+  node "$SCRIPT_DIR/core/ink-ui/main.mjs" 2>/dev/null || true
+}
+
 # proxy.mjs sits next to this script (or one directory up if cloned standalone)
 if [[ -f "$SCRIPT_DIR/proxy.mjs" ]]; then
   PROXY_FILE="$SCRIPT_DIR/proxy.mjs"
@@ -33,12 +47,18 @@ fi
 
 # ── Check which key is available ─────────────────────────────────────────────
 if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
+  _jelly_splash "anthropic"
   echo ""
   echo "  ✅  Anthropic API key detected — launching with Claude paid models."
   echo ""
   exec claude "$@"
 
 elif [[ -n "${OPENROUTER_API_KEY:-}" ]]; then
+  # Set model env vars before splash so helper picks them up
+  export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek/deepseek-v4-pro"
+  export ANTHROPIC_DEFAULT_SONNET_MODEL="x-ai/grok-4.3"
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL="nvidia/nemotron-3-nano-30b-a3b:exacto"
+  _jelly_splash "openrouter"
   echo ""
   echo "  ✅  OpenRouter API key detected — starting proxy and launching with free model tiers."
   echo ""
@@ -49,15 +69,28 @@ elif [[ -n "${OPENROUTER_API_KEY:-}" ]]; then
     exit 1
   fi
 
+  # ── Pre-spawn preflight: ensure port 7788 is free (kills stale proxy) ───────
+  if ! node "$SCRIPT_DIR/scripts/proxy-preflight.mjs"; then
+    echo "  ❌  Port 7788 could not be freed — aborting."
+    exit 1
+  fi
+
   node "$PROXY_FILE" &
   PROXY_PID=$!
   trap 'kill "$PROXY_PID" 2>/dev/null || true' EXIT INT TERM
 
   # Wait for port 7788 to be ready (up to 10 s, 20 × 0.5 s)
+  # Also verify our spawned PROXY_PID is the one that owns the port.
   READY=0
   for i in $(seq 1 20); do
-    if node -e "
-const net = require('net');
+    # Check our proxy process is still alive
+    if ! kill -0 "$PROXY_PID" 2>/dev/null; then
+      echo "  ❌  Proxy process exited unexpectedly — aborting."
+      exit 1
+    fi
+    # Check port is accepting connections
+    if node --input-type=module -e "
+import net from 'net';
 const s = net.createConnection(7788, '127.0.0.1');
 s.on('connect', () => { s.destroy(); process.exit(0); });
 s.on('error', () => { s.destroy(); process.exit(1); });
@@ -74,6 +107,12 @@ s.on('error', () => { s.destroy(); process.exit(1); });
     exit 1
   fi
 
+  # Final ownership check: our spawned PID must still be alive
+  if ! kill -0 "$PROXY_PID" 2>/dev/null; then
+    echo "  ❌  Proxy process died after port became ready — another process may own port 7788."
+    exit 1
+  fi
+
   # ── Model tiers ──────────────────────────────────────────────────────────
   export ANTHROPIC_API_KEY="$OPENROUTER_API_KEY"
   export ANTHROPIC_BASE_URL="http://127.0.0.1:7788"
@@ -87,6 +126,7 @@ s.on('error', () => { s.destroy(); process.exit(1); });
   claude "$@"
 
 else
+  _jelly_splash "none"
   echo ""
   echo "  ℹ️  No API key found — falling through to Claude's built-in login."
   echo ""

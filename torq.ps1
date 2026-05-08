@@ -4,7 +4,7 @@
 # GitHub: https://github.com/jelly-chain/jelly-claude
 # ─────────────────────────────────────────────────────────────────────────────
 
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ScriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $EnvFile = Join-Path $ScriptDir ".env"
 
 # Locate proxy.mjs
@@ -56,12 +56,23 @@ if (-not $ProxyFile) {
   exit 1
 }
 
+# ── Pre-spawn preflight: ensure port 7788 is free (kills stale proxy) ──────────
+& node (Join-Path $ScriptDir "scripts\proxy-preflight.mjs")
+if ($LASTEXITCODE -ne 0) {
+  Write-Host "  ❌  Port 7788 could not be freed — aborting."
+  exit 1
+}
+
 # Start proxy
 $ProxyProcess = Start-Process node -ArgumentList $ProxyFile -PassThru -WindowStyle Hidden
 
-# Wait for proxy to be ready (up to 10s)
+# Wait for proxy to be ready (up to 10s); verify ownership each poll
 $Ready = $false
 for ($i = 0; $i -lt 20; $i++) {
+  if ($ProxyProcess.HasExited) {
+    Write-Host "  ❌  Proxy process exited unexpectedly — aborting."
+    exit 1
+  }
   try {
     $tcp = New-Object System.Net.Sockets.TcpClient
     $tcp.Connect("127.0.0.1", 7788)
@@ -76,6 +87,12 @@ for ($i = 0; $i -lt 20; $i++) {
 if (-not $Ready) {
   Write-Host "  ❌  Proxy did not start on port 7788 within 10 seconds — aborting."
   Stop-Process -Id $ProxyProcess.Id -Force -ErrorAction SilentlyContinue
+  exit 1
+}
+
+# Final ownership check
+if ($ProxyProcess.HasExited) {
+  Write-Host "  ❌  Proxy process died after port became ready — another process may own port 7788."
   exit 1
 }
 

@@ -112,7 +112,7 @@ else
     ok "Solana wallet generated: $(cat "$SOLANA_PUB")"
   else
     # Fallback: generate Ed25519 keypair in Node.js
-    node - <<NODESCRIPT
+    node --input-type=commonjs - <<NODESCRIPT
 const crypto = require('crypto');
 const fs = require('fs');
 const walletDir = '$WALLETS_DIR';
@@ -154,7 +154,7 @@ else
   ETHERS_TMP="$(mktemp -d)"
   step "Installing ethers.js for wallet derivation (temp install)..."
   npm install --prefix "$ETHERS_TMP" ethers --silent 2>/dev/null
-  node - <<NODESCRIPT
+  node --input-type=commonjs - <<NODESCRIPT
 const crypto = require('crypto');
 const fs     = require('fs');
 const { ethers } = require('$ETHERS_TMP/node_modules/ethers');
@@ -240,38 +240,20 @@ chmod 600 "$KEYS_FILE"
 ok "Keys saved to $KEYS_FILE"
 
 # ── 10. Clone & install skills ───────────────────────────────────────────────
-step "Cloning jelly-claude-skills..."
-SKILLS_REPO_DIR="$PARENT_DIR/jelly-claude-skills"
-if [[ -d "$SKILLS_REPO_DIR/.git" ]]; then
-  ok "jelly-claude-skills already cloned — pulling latest..."
-  git -C "$SKILLS_REPO_DIR" pull --quiet || warn "git pull failed; continuing with existing version"
-elif [[ -d "$SKILLS_REPO_DIR" ]]; then
-  ok "jelly-claude-skills directory found (not a git repo — using as-is)"
-else
-  git clone https://github.com/jelly-chain/jelly-claude-skills.git "$SKILLS_REPO_DIR"
-  ok "jelly-claude-skills cloned"
+# install-skills.mjs handles clone → bundled fallback internally; always run it.
+step "Installing skills (clone or bundled fallback)..."
+if ! node "$SCRIPT_DIR/scripts/install-skills.mjs"; then
+  err "install-skills.mjs failed — check output above"
+  exit 1
 fi
-
-step "Installing all skills..."
-bash "$SKILLS_REPO_DIR/install-all.sh"
-ok "All skills installed"
 
 # ── 11. Clone & install agent templates ──────────────────────────────────────
-step "Cloning jelly-claude-agents..."
-AGENTS_REPO_DIR="$PARENT_DIR/jelly-claude-agents"
-if [[ -d "$AGENTS_REPO_DIR/.git" ]]; then
-  ok "jelly-claude-agents already cloned — pulling latest..."
-  git -C "$AGENTS_REPO_DIR" pull --quiet || warn "git pull failed; continuing with existing version"
-elif [[ -d "$AGENTS_REPO_DIR" ]]; then
-  ok "jelly-claude-agents directory found (not a git repo — using as-is)"
-else
-  git clone https://github.com/jelly-chain/jelly-claude-agents.git "$AGENTS_REPO_DIR"
-  ok "jelly-claude-agents cloned"
+# install-agents.mjs handles clone → bundled fallback internally; always run it.
+step "Installing agent templates (clone or bundled fallback)..."
+if ! node "$SCRIPT_DIR/scripts/install-agents.mjs"; then
+  err "install-agents.mjs failed — check output above"
+  exit 1
 fi
-
-step "Installing all agent templates..."
-bash "$AGENTS_REPO_DIR/install-all.sh"
-ok "All agent templates installed"
 
 # ── Summary ──────────────────────────────────────────────────────────────────
 SOLANA_ADDRESS=$(cat "$WALLETS_DIR/solana.pub" 2>/dev/null || echo 'see ~/.jelly-claude/wallets/solana.json')

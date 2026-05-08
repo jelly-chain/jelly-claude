@@ -3,7 +3,7 @@
 # GitHub: https://github.com/jelly-chain/jelly-claude
 # ─────────────────────────────────────────────────────────────────────────────
 
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ScriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $EnvFile   = Join-Path $ScriptDir ".env"
 
 # proxy.mjs bundled with this repo; fall back to parent directory if needed
@@ -56,12 +56,24 @@ if ($AnthropicKey) {
         exit 1
     }
 
+    # ── Pre-spawn preflight: ensure port 7788 is free (kills stale proxy) ──────
+    & node (Join-Path $ScriptDir "scripts\proxy-preflight.mjs")
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "  ERROR: Port 7788 could not be freed - aborting." -ForegroundColor Red
+        exit 1
+    }
+
     $proxyProc = Start-Process -FilePath "node" -ArgumentList $ProxyFile `
                                -PassThru -WindowStyle Hidden
 
     # Wait for port 7788 to be ready (up to 10 s, 20 x 0.5 s)
+    # Verify our spawned process is still alive on each poll.
     $ready = $false
     for ($i = 0; $i -lt 20; $i++) {
+        if ($proxyProc.HasExited) {
+            Write-Host "  ERROR: Proxy process exited unexpectedly - aborting." -ForegroundColor Red
+            exit 1
+        }
         try {
             $tcp = New-Object System.Net.Sockets.TcpClient
             $tcp.Connect("127.0.0.1", 7788)
@@ -79,13 +91,19 @@ if ($AnthropicKey) {
         exit 1
     }
 
+    # Final ownership check: our spawned process must still be alive
+    if ($proxyProc.HasExited) {
+        Write-Host "  ERROR: Proxy process died after port became ready - another process may own port 7788." -ForegroundColor Red
+        exit 1
+    }
+
     # ── Model tiers ──────────────────────────────────────────────────────────
     $env:ANTHROPIC_API_KEY              = $OpenRouterKey
     $env:ANTHROPIC_BASE_URL             = "http://127.0.0.1:7788"
-    $env:ANTHROPIC_DEFAULT_OPUS_MODEL   = "deepseek/deepseek-r1:free"
+    $env:ANTHROPIC_DEFAULT_OPUS_MODEL   = "deepseek/deepseek-v4-pro"
     $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "x-ai/grok-4.3"
     $env:ANTHROPIC_DEFAULT_HAIKU_MODEL  = "nvidia/nemotron-3-nano-30b-a3b:exacto"
-    $env:CLAUDE_CODE_SUBAGENT_MODEL     = "google/gemma-2-9b-it:free"
+    $env:CLAUDE_CODE_SUBAGENT_MODEL     = "qwen/qwen3-next-80b-a3b-thinking"
 
     # Run claude as a child process so the finally block can clean up the proxy
     try {

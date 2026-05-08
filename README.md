@@ -48,13 +48,11 @@ BASE: SOON
 ### Mac / Linux
 
 ```bash
-# 1. Clone the three Jelly-Chain repos into the same parent folder
+# 1. Clone the repo (setup.sh auto-installs skills and agents)
 git clone https://github.com/jelly-chain/jelly-claude
-git clone https://github.com/jelly-chain/jelly-claude-skills
-git clone https://github.com/jelly-chain/jelly-claude-agents
+cd jelly-claude
 
 # 2. Run the setup wizard (one time only)
-cd jelly-claude
 bash setup.sh
 
 # 3. Add your API key to .env
@@ -67,16 +65,19 @@ bash jelly-claude.sh
 bash torq.sh
 ```
 
+> **Tip:** `setup.sh` automatically clones `jelly-claude-skills` and `jelly-claude-agents` from GitHub into sibling directories and installs them. You only need to clone one repo.
+
 ### Windows (PowerShell)
 
 ```powershell
-# 1. Clone the repos
+# If you get an execution policy error, run first:
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+# 1. Clone the repo
 git clone https://github.com/jelly-chain/jelly-claude
-git clone https://github.com/jelly-chain/jelly-claude-skills
-git clone https://github.com/jelly-chain/jelly-claude-agents
+cd jelly-claude
 
 # 2. Run setup
-cd jelly-claude
 .\setup.ps1
 
 # 3. Add your API key to .env, then launch
@@ -100,10 +101,10 @@ Works with free or cheap models. Jelly-Claude auto-configures these model tiers:
 
 | Role | Model |
 |------|-------|
-| Opus (complex tasks) | `google/gemma-4-31b-it:free` |
-| Sonnet (everyday tasks) | `arcee-ai/trinity-large-preview:free` |
-| Haiku (fast tasks) | `nvidia/nemotron-3-super-120b-a12b` |
-| Sub-agent | `nvidia/nemotron-3-super-120b-a12b:free` |
+| Opus (complex tasks) | `deepseek/deepseek-v4-pro` |
+| Sonnet (everyday tasks) | `x-ai/grok-4.3` |
+| Haiku (fast tasks) | `nvidia/nemotron-3-nano-30b-a3b:exacto` |
+| Sub-agent | `qwen/qwen3-next-80b-a3b-thinking` |
 
 ```
 OPENROUTER_API_KEY=sk-or-...
@@ -145,15 +146,17 @@ Base:
 
 ## What setup.sh does
 
-1. Checks for Node.js and npm
+1. Checks for Node.js, npm, and git
 2. Installs `@anthropic-ai/claude-code` globally
 3. Generates a **Solana wallet** — saved to `~/.jelly-claude/wallets/solana.json`
 4. Generates an **EVM wallet** (works for BNB Chain and Polygon) — saved to `~/.jelly-claude/wallets/evm.json`
 5. Optionally stores your Polymarket, Kalshi, predict.fun, and other service API keys in `~/.jelly-claude/.keys`
-6. Installs all 28 skills from `jelly-claude-skills`
-7. Installs all 28 agent templates from `jelly-claude-agents`
+6. Clones and installs all 28 skills from `jelly-claude-skills` (or updates them if already present)
+7. Clones and installs all 28 agent templates from `jelly-claude-agents` (or updates them if already present)
 
 > **Security:** wallet private keys and API keys are stored only in `~/.jelly-claude/` on your local machine and are never committed to any repo.
+
+> **No multi-clone required:** `setup.sh` handles cloning the skills and agents repos automatically. You only need to clone `jelly-claude` itself.
 
 ---
 
@@ -211,12 +214,12 @@ No KYC required. Test on BNB Testnet first (no API key needed on testnet).
 Skills teach the Claude agent how to interact with specific protocols and APIs.
 They live in `~/.claude/skills/` after installation.
 
-Install all skills at once:
+Install all skills at once (auto-clones the skills repo if needed):
 ```bash
-bash ../jelly-claude-skills/install-all.sh
+npm run install-skills
 ```
 
-Install a single skill:
+Or install a single skill:
 ```bash
 bash ../jelly-claude-skills/skills/jupiter-skill/install.sh
 ```
@@ -229,9 +232,9 @@ See [github.com/jelly-chain/jelly-claude-skills](https://github.com/jelly-chain/
 
 28 pre-built agents you can summon with `/agent` inside Claude Code.
 
-Install all:
+Install all (auto-clones the agents repo if needed):
 ```bash
-bash ../jelly-claude-agents/install-all.sh
+npm run install-agents
 ```
 
 Then inside Claude Code:
@@ -286,6 +289,21 @@ All 9 modules: `market`, `portfolio`, `scanner`, `alerts`, `analytics`, `predict
 
 ---
 
+## npm Scripts
+
+```bash
+npm start              # Launch Jelly-Claude agent
+npm run proxy          # Start the OpenRouter proxy only
+npm run health         # Health check — verifies files, config, wallets
+npm run check          # Dependency check — Node, npm, packages
+npm run reset          # Clear logs and node_modules (keeps .env and wallets)
+npm run reset -- --logs-only   # Clear logs only
+npm run install-skills # Install / update all skills from jelly-claude-skills
+npm run install-agents # Install / update all agent templates from jelly-claude-agents
+```
+
+---
+
 ## AI Agents (v2)
 
 9 built-in agents used by the SDK pipeline and callable from Claude Code:
@@ -315,6 +333,60 @@ All 9 modules: `market`, `portfolio`, `scanner`, `alerts`, `analytics`, `predict
 | `config/keywords.json` | Bullish / bearish / high-priority keyword lists |
 | `config/providers.json` | API base URLs for all data providers |
 | `config/torq.json` | TORQ mode model selection |
+
+---
+
+## Jelly Score — how it works
+
+The **Jelly Score** (0–100) is the core signal quality metric:
+
+| Score | Meaning | Action |
+|-------|---------|--------|
+| 80–100 | Strong signal | Full position size |
+| 60–79 | Moderate signal | Half position size |
+| 0–59 | Weak signal | Do not trade |
+
+### Edge Score
+Alongside the Jelly Score, predictions now include an **Edge Score** — the estimated probability advantage over the implied market price. A high edge score (>10pp) combined with a high Jelly Score is the strongest entry signal.
+
+### Market Divergence
+When `platformPrices` is supplied (e.g. `{ polymarket: 0.62, kalshi: 0.55 }`), the predictor computes a **divergence report** — spread, min/max, and whether an arbitrage window is open (>3% spread by default).
+
+### Sentiment Hook
+You can inject any external sentiment signal (news, social, on-chain) into the predictor:
+```js
+import { getPredictor } from './core/prediction.mjs';
+const predictor = getPredictor();
+predictor.setSentimentHook(async (input) => {
+  // return a float 0–1 (0 = bearish, 1 = bullish)
+  return await mySentimentAPI(input.text);
+});
+```
+
+---
+
+## Telegram Notifications
+
+Add your Telegram bot token and chat ID to `.env`:
+
+```
+TELEGRAM_BOT_TOKEN=  # Create a bot via @BotFather on Telegram
+TELEGRAM_CHAT_ID=    # Find your chat ID via @userinfobot
+```
+
+The Telegram interface will be available in the next release (`jelly-telegram.mjs`).
+
+---
+
+## Birdeye Integration
+
+Add your Birdeye API key to `.env` for enhanced Solana token analytics:
+
+```
+BIRDEYE_API_KEY=  # Get one at https://birdeye.so/settings/api
+```
+
+Used by the `scanner` and `signal-hunter` agents for price feeds, token metadata, and whale tracking on Solana.
 
 ---
 
