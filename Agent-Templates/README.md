@@ -55,15 +55,6 @@ Inside Claude Code:
 | `event-risk-scorer` | Enumerate risk factors and produce a Jelly Risk Score (0–100) before any trade |
 | `kalshi-polymarket-spreader` | Kalshi ↔ Polymarket arb with full fee model and collateral-type handling |
 
-### Solana DeFi
-| Agent | Description |
-|-------|-------------|
-| `pump-launcher` | Launch tokens on pump.fun with dev-buy and fee configuration |
-| `raydium-lp` | Open and manage Raydium CLMM/AMM liquidity positions |
-| `jupiter-trader` | Swaps, DCA strategies, and limit orders via Jupiter |
-| `orca-market-maker` | Manage Orca Whirlpool concentrated liquidity positions |
-| `meteora-launcher` | Launch tokens via Meteora bonding curve + AMM |
-| `yield-optimizer` | Find and enter highest-yield positions via Kamino + Lulo |
 
 ### BNB / EVM
 | Agent | Description |
@@ -73,6 +64,17 @@ Inside Claude Code:
 | `cross-chain-bridge` | Bridge tokens between Solana ↔ EVM via deBridge |
 | `base-dex-trader` | Swaps on Base via Aerodrome and Uniswap V3 with LP position management |
 | `hyperliquid-trader` | Open/close perpetual positions, set leverage, monitor funding rates on Hyperliquid |
+
+
+### Solana DeFi
+| Agent | Description |
+|-------|-------------|
+| `pump-launcher` | Launch tokens on pump.fun with dev-buy and fee configuration |
+| `raydium-lp` | Open and manage Raydium CLMM/AMM liquidity positions |
+| `jupiter-trader` | Swaps, DCA strategies, and limit orders via Jupiter |
+| `orca-market-maker` | Manage Orca Whirlpool concentrated liquidity positions |
+| `meteora-launcher` | Launch tokens via Meteora bonding curve + AMM |
+| `yield-optimizer` | Find and enter highest-yield positions via Kamino + Lulo |
 
 ### Data & Analytics
 | Agent | Description |
