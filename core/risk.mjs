@@ -5,10 +5,19 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PROFILES  = JSON.parse(readFileSync(join(__dirname, '../config/risk-profiles.json'), 'utf8'));
+const PROFILES   = JSON.parse(readFileSync(join(__dirname, '../config/risk-profiles.json'), 'utf8'));
 const STRATEGIES = JSON.parse(readFileSync(join(__dirname, '../config/strategies.json'), 'utf8'));
 
 const log = createLogger('risk');
+
+function safeNum(v, fallback = 0) {
+  const n = Number(v);
+  return isFinite(n) ? n : fallback;
+}
+
+function clamp(v, lo = 0, hi = 1) {
+  return Math.min(Math.max(safeNum(v, lo), lo), hi);
+}
 
 export class RiskAssessor {
   constructor(opts = {}) {
@@ -24,28 +33,31 @@ export class RiskAssessor {
   }
 
   assess(prediction, tradeParams = {}) {
-    const { jellyScore = 0, confidence = 0, riskScore = 1 } = prediction;
+    const jellyScore  = safeNum(prediction.jellyScore, 0);
+    const confidence  = clamp(safeNum(prediction.confidence, 0));
+    const riskScore   = clamp(safeNum(prediction.riskScore, 1));
+    const leverage    = safeNum(tradeParams.leverage, 0);
 
     const checks = {
-      jellyScoreOk:  jellyScore  >= this._config.jellyScoreMin,
-      confidenceOk:  confidence  >= this._config.confidenceMin,
-      riskScoreOk:   riskScore   <= this._config.riskScoreMax,
-      leverageOk:    !tradeParams.leverage || tradeParams.leverage <= this._config.maxLeverage,
+      jellyScoreOk:  jellyScore  >= safeNum(this._config.jellyScoreMin, 0),
+      confidenceOk:  confidence  >= clamp(safeNum(this._config.confidenceMin, 0)),
+      riskScoreOk:   riskScore   <= clamp(safeNum(this._config.riskScoreMax, 1)),
+      leverageOk:    leverage === 0 || leverage <= safeNum(this._config.maxLeverage, Infinity),
     };
 
-    const passed = Object.values(checks).every(Boolean);
+    const passed  = Object.values(checks).every(Boolean);
     const sizePct = this._computeSize(jellyScore, tradeParams);
 
     const assessment = {
-      ok:         passed,
-      profile:    this._profile,
+      ok:             passed,
+      profile:        this._profile,
       jellyScore,
       sizePct,
-      maxPositionPct: this._config.maxPositionPct,
+      maxPositionPct: safeNum(this._config.maxPositionPct, 5),
       checks,
-      stopLossPct:    this._config.stopLossPct,
-      takeProfitPct:  this._config.takeProfitPct,
-      reason:     passed ? 'All risk checks passed' : this._failReason(checks),
+      stopLossPct:    safeNum(this._config.stopLossPct, 40),
+      takeProfitPct:  safeNum(this._config.takeProfitPct, 200),
+      reason:         passed ? 'All risk checks passed' : this._failReason(checks),
     };
 
     if (!passed) bus.risk({ type: 'blocked', assessment });
@@ -54,11 +66,15 @@ export class RiskAssessor {
   }
 
   _computeSize(jellyScore, tradeParams) {
-    const rules = STRATEGIES.jellyScore;
+    const rules  = STRATEGIES.jellyScore;
+    const jelly  = safeNum(jellyScore, 0);
     let pct = 0;
-    if (jellyScore >= rules.fullSize.min) pct = rules.fullSize.sizePct;
-    else if (jellyScore >= rules.halfSize.min) pct = rules.halfSize.sizePct;
-    return Math.min(pct, this._config.maxPositionPct * (pct / 100) * 20);
+    if (jelly >= safeNum(rules.fullSize?.min, 80)) pct = safeNum(rules.fullSize?.sizePct, 100);
+    else if (jelly >= safeNum(rules.halfSize?.min, 60)) pct = safeNum(rules.halfSize?.sizePct, 50);
+
+    const maxPosPct = safeNum(this._config.maxPositionPct, 5);
+    const raw = maxPosPct * (pct / 100);
+    return isFinite(raw) ? parseFloat(raw.toFixed(4)) : 0;
   }
 
   _failReason(checks) {
@@ -92,14 +108,16 @@ export class ConfidenceEngine {
     let weightUsed = 0;
 
     for (const [key, weight] of Object.entries(this._weights)) {
+      const w = safeNum(weight, 0);
       if (factors[key] != null) {
-        total += factors[key] * weight;
-        weightUsed += weight;
+        const f = clamp(safeNum(factors[key], 0));
+        total += f * w;
+        weightUsed += w;
       }
     }
 
-    const raw = weightUsed > 0 ? total / weightUsed : 0;
-    const confidence = Math.min(Math.max(raw, 0), 1);
+    const raw        = weightUsed > 0 ? total / weightUsed : 0;
+    const confidence = clamp(raw);
     const jellyScore = Math.round(confidence * 100);
 
     return { confidence: parseFloat(confidence.toFixed(4)), jellyScore, factors, weights: this._weights };
@@ -107,10 +125,10 @@ export class ConfidenceEngine {
 
   fromPrediction(prediction) {
     return {
-      confidence: prediction.confidence,
-      jellyScore: prediction.jellyScore,
+      confidence: clamp(safeNum(prediction.confidence, 0)),
+      jellyScore: safeNum(prediction.jellyScore, 0),
       signal:     prediction.signal,
-      riskScore:  prediction.riskScore,
+      riskScore:  clamp(safeNum(prediction.riskScore, 0)),
     };
   }
 }

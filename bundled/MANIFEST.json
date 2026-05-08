@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "description": "Bundled Jelly-Claude skills and agents — installed when external repos are unavailable",
+  "skills": [
+    { "name": "jelly-core-skill",    "desc": "Jelly Score system, core modules, multi-chain framework" },
+    { "name": "polymarket-skill",    "desc": "Polymarket prediction markets on Polygon" },
+    { "name": "kalshi-skill",        "desc": "Kalshi regulated US prediction markets" },
+    { "name": "jupiter-skill",       "desc": "Jupiter DEX aggregator on Solana" },
+    { "name": "pump-fun-skill",      "desc": "pump.fun Solana memecoin launch platform" },
+    { "name": "raydium-skill",       "desc": "Raydium AMM/CLMM DEX on Solana" },
+    { "name": "pancakeswap-skill",   "desc": "PancakeSwap DEX on BNB Chain" },
+    { "name": "birdeye-skill",       "desc": "Birdeye Solana token analytics and price feeds" },
+    { "name": "telegram-skill",      "desc": "Telegram bot notifications for signals and alerts" },
+    { "name": "predict-fun-skill",   "desc": "predict.fun BNB Chain prediction markets" },
+    { "name": "sports-betting-skill","desc": "Sports data APIs and value bet identification" },
+    { "name": "alchemy-skill",       "desc": "Alchemy Web3 multi-chain RPC and enhanced APIs" },
+    { "name": "helius-skill",        "desc": "Helius Solana RPC, DAS API, and webhooks" },
+    { "name": "coingecko-skill",     "desc": "CoinGecko free crypto market data API" },
+    { "name": "four-meme-skill",     "desc": "four.meme BNB Chain memecoin launch platform" }
+  ],
+  "agents": [
+    { "name": "jelly-predictor",  "desc": "Market signal scoring agent — Jelly Score 0-100" },
+    { "name": "jelly-trader",     "desc": "Multi-chain trading agent — Polymarket, Kalshi, Jupiter, PancakeSwap" },
+    { "name": "jelly-scanner",    "desc": "New token and volume spike scanner — Solana and BNB Chain" },
+    { "name": "jelly-sports",     "desc": "Sports prediction agent — value bets on Polymarket/Kalshi" },
+    { "name": "jelly-arbitrage",  "desc": "Cross-platform arbitrage detection and execution" },
+    { "name": "jelly-portfolio",  "desc": "Portfolio management, P&L tracking, and rebalancing" },
+    { "name": "jelly-news",       "desc": "News and social sentiment scanner for early signals" }
+  ]
+}
