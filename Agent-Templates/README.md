@@ -59,7 +59,6 @@ Inside Claude Code:
 | Agent | Description |
 |-------|-------------|
 | `pump-launcher` | Launch tokens on pump.fun with dev-buy and fee configuration |
-| `four-meme-launcher` | Launch meme tokens on four.meme (BNB launchpad) |
 | `raydium-lp` | Open and manage Raydium CLMM/AMM liquidity positions |
 | `jupiter-trader` | Swaps, DCA strategies, and limit orders via Jupiter |
 | `orca-market-maker` | Manage Orca Whirlpool concentrated liquidity positions |
@@ -70,6 +69,7 @@ Inside Claude Code:
 | Agent | Description |
 |-------|-------------|
 | `bnb-dex-trader` | BNB chain swaps on PancakeSwap with safety checks |
+| `four-meme-launcher` | Launch meme tokens on four.meme (BNB launchpad) |
 | `cross-chain-bridge` | Bridge tokens between Solana ↔ EVM via deBridge |
 | `base-dex-trader` | Swaps on Base via Aerodrome and Uniswap V3 with LP position management |
 | `hyperliquid-trader` | Open/close perpetual positions, set leverage, monitor funding rates on Hyperliquid |
