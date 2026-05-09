@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "jelly-x402"
+version = "1.0.0"
+authors = [
+    { name = "Jelly Chain", email = "support@jellychain.fun" }
+]
+description = "Official Python SDK for the Jelly x402 autonomous payment protocol on Solana"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["jelly", "x402", "solana", "payments", "ai", "agents", "autonomous", "web3", "jellychain"]
+dependencies = [
+    "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+flask  = ["flask>=2.0.0"]
+solana = ["solana>=0.30.0", "solders>=0.18.0"]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage      = "https://jellychain.fun"
+Documentation = "https://jellychain.fun/docs"
+Repository    = "https://github.com/jelly-chain/sdk"
+Issues        = "https://github.com/jelly-chain/sdk/issues"
+
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["x402_sdk*"]

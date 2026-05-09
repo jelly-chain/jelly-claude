@@ -1,0 +1,49 @@
+{
+  "name": "@jelly-chain/bnb-sdk",
+  "version": "1.0.0",
+  "description": "Jelly x402 BNB Chain SDK — HTTP 402 autonomous payments on BSC",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc && rollup -c",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [
+    "bnb",
+    "bsc",
+    "binance",
+    "x402",
+    "http402",
+    "payment",
+    "web3",
+    "ai-agents",
+    "autonomous-payments",
+    "jelly"
+  ],
+  "author": "Jelly Chain",
+  "license": "MIT",
+  "homepage": "https://jellychain.fun",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jelly-chain/sdk"
+  },
+  "peerDependencies": {
+    "ethers": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ethers": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ethers": "^6.0.0"
+  }
+}
