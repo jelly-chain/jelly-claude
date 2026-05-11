@@ -1,6 +1,6 @@
 # Jelly-Claude Agents
 
-> 37 ready-to-use agent templates for the Jelly-Claude multi-chain AI agent framework.
+> 47 ready-to-use agent templates for the Jelly-Claude multi-chain AI agent framework.
 
 **GitHub:** [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents)
 
@@ -20,31 +20,33 @@ This copies all `agent.md` files to `~/.claude/agents/`.
 ## Install one agent
 
 ```bash
-bash install-all.sh --only polymarket-trader
+bash install-all.sh --only predict-fun-trader
 ```
 
 Or manually:
 ```bash
-cp agents/polymarket-trader/agent.md ~/.claude/agents/polymarket-trader.md
+cp agents/predict-fun-trader/agent.md ~/.claude/agents/predict-fun-trader.md
 ```
 
 ## Use an agent
 
 Inside Claude Code:
 ```
-/agent polymarket-trader
+/agent predict-fun-trader
 ```
 
 ---
 
-## Agent list (37 agents)
+## Agent list (47 agents)
 
 ### Prediction Markets
 | Agent | Description |
 |-------|-------------|
 | `polymarket-trader` | Browse, analyze, and trade Polymarket prediction markets on Polygon |
 | `kalshi-trader` | Browse, analyze, and trade Kalshi binary contracts (US regulated) |
+| `predict-fun-trader` | Full predict.fun CLOB trading on BNB Chain — orderbook, orders, positions, OAuth |
 | `jelly-predictions-agent` | Cross-reference jellychain.fun on-chain data with Polymarket and Kalshi markets |
+| `prediction-market-monitor` | Continuous position monitoring and price alerts across all three platforms |
 
 ### Prediction Intelligence
 | Agent | Description |
@@ -54,80 +56,92 @@ Inside Claude Code:
 | `sentiment-tracker` | Aggregate social signals and overlay net sentiment on current YES/NO prices |
 | `event-risk-scorer` | Enumerate risk factors and produce a Jelly Risk Score (0–100) before any trade |
 | `kalshi-polymarket-spreader` | Kalshi ↔ Polymarket arb with full fee model and collateral-type handling |
-
-
-### BNB / EVM
-| Agent | Description |
-|-------|-------------|
-| `bnb-dex-trader` | BNB chain swaps on PancakeSwap with safety checks |
-| `four-meme-launcher` | Launch meme tokens on four.meme (BNB launchpad) |
-| `cross-chain-bridge` | Bridge tokens between Solana ↔ EVM via deBridge |
-| `base-dex-trader` | Swaps on Base via Aerodrome and Uniswap V3 with LP position management |
-| `hyperliquid-trader` | Open/close perpetual positions, set leverage, monitor funding rates on Hyperliquid |
-
+| `orderbook-analyst` | Deep orderbook microstructure analysis — depth, spread, imbalance, fair value |
+| `news-sentiment-trader` | Map breaking news to live prediction markets and find news-driven mispricings |
+| `market-maker` | Two-sided LIMIT order market making on predict.fun CLOB to earn the spread |
 
 ### Solana DeFi
 | Agent | Description |
 |-------|-------------|
-| `pump-launcher` | Launch tokens on pump.fun with dev-buy and fee configuration |
-| `raydium-lp` | Open and manage Raydium CLMM/AMM liquidity positions |
-| `jupiter-trader` | Swaps, DCA strategies, and limit orders via Jupiter |
-| `orca-market-maker` | Manage Orca Whirlpool concentrated liquidity positions |
-| `meteora-launcher` | Launch tokens via Meteora bonding curve + AMM |
-| `yield-optimizer` | Find and enter highest-yield positions via Kamino + Lulo |
+| `jupiter-trader` | Jupiter Ultra swaps, DCA, and limit orders on Solana |
+| `meteora-launcher` | Meteora DLMM pool creation and liquidity management |
+| `orca-market-maker` | Orca Whirlpool concentrated liquidity market making |
+| `raydium-lp` | Raydium CLMM and CPMM LP management |
+| `airdrop-hunter` | Solana airdrop eligibility checker and farming strategy |
+| `pump-launcher` | Launch a token on pump.fun with bonding curve and marketing setup |
+| `four-meme-launcher` | Token launch on Four.meme (BNB Chain meme launchpad) |
+| `solana-data-fetcher` | Pull Solana on-chain data, SPL balances, token metadata |
+| `solana-flow-analyst` | Analyze Solana transaction flows and wallet activity |
 
-### Data & Analytics
+### Token Discovery
 | Agent | Description |
 |-------|-------------|
-| `solana-data-fetcher` | Token prices, holder data, DEX stats via Helius + CoinGecko |
-| `bnb-data-fetcher` | BSC token data, contracts, and market metrics via BNB Chain MCP |
-| `portfolio-tracker` | Wallet balances and PnL across Solana + BNB + Polygon |
-| `on-chain-analyst` | Market reports combining Pyth + CoinGecko + DeFiLlama |
-| `token-security-auditor` | Honeypot checks, holder concentration, contract analysis |
-| `birdeye-analyst` | Trending tokens, holder analysis, top traders, and wallet P&L via Birdeye |
-| `dexscreener-scanner` | Discover new pairs, filter by liquidity/volume/age, monitor price moves |
+| `token-launch-monitor` | Monitor new launches on pump.fun and DexScreener — Jelly Launch Score, red flags |
+| `dexscreener-scanner` | New pair discovery and volume surge detection via DexScreener |
+| `whale-signal-predictor` | Predict market moves based on whale wallet activity patterns |
 
-### On-Chain Signal
+### DeFi & Yield
 | Agent | Description |
 |-------|-------------|
-| `whale-signal-predictor` | Watch whale wallets via Helius; fire JellyScore re-evaluation on large moves |
-| `defi-tvl-predictor` | Track DeFiLlama TVL momentum as a leading indicator for ecosystem markets |
-| `solana-flow-analyst` | Net accumulation vs. distribution on any SPL token using Helius enhanced transactions |
+| `defi-yield-optimizer` | Best risk-adjusted yield for any token across Aave, Morpho, Compound, Uniswap V3 |
+| `yield-optimizer` | General yield optimization across Solana DeFi protocols |
+| `defi-tvl-predictor` | Predict TVL movements from on-chain signals and market conditions |
+| `auto-hedge-suggester` | Automatically suggest hedges for open positions based on correlation analysis |
+| `mev-arbitrage` | MEV and DEX arbitrage detection and execution |
 
-### Portfolio & Risk
+### NFT
 | Agent | Description |
 |-------|-------------|
-| `multi-chain-risk-dashboard` | Aggregate all prediction + DeFi positions into one risk view with VaR and concentration flags |
-| `auto-hedge-suggester` | Suggest cost-effective hedges to reduce net delta exposure below a configurable threshold |
+| `nft-minter` | Mint NFTs using Metaplex on Solana |
+| `nft-flipper` | Monitor floor, find underpriced NFTs, execute buys and lists for profit |
 
-### Infrastructure & Utility
+### Multi-Chain Trading
 | Agent | Description |
 |-------|-------------|
-| `nft-minter` | Mint Core NFTs and collections via Metaplex |
-| `airdrop-hunter` | Monitor and claim airdrop eligibility across protocols |
-| `wallet-watcher` | Monitor wallets and alert on large/suspicious transfers |
-| `multisig-manager` | Create and manage Squads multisig wallets |
-| `mev-arbitrage` | Multi-DEX arbitrage on Solana with quote aggregation |
-| `prediction-market-monitor` | Watch Polymarket + Kalshi + DFlow + PNP for sharp moves |
+| `bnb-dex-trader` | DEX trading on BNB Chain (PancakeSwap, Venus) |
+| `bnb-data-fetcher` | BNB Chain on-chain data, balances, and contract reads |
+| `base-dex-trader` | DEX trading on Base (Aerodrome, Uniswap V3) |
+| `hyperliquid-trader` | Hyperliquid perpetuals — open/close positions, leverage, stop-loss |
+| `cross-chain-bridge` | Cross-chain bridge operations and monitoring |
+| `cross-exchange-arb` | Price gap detection and arb across OKX, Hyperliquid, Binance, and DEXes |
+| `portfolio-rebalancer` | Aggregate multi-chain portfolio and rebalance to target allocations |
+
+### Analytics & Intelligence
+| Agent | Description |
+|-------|-------------|
+| `birdeye-analyst` | Token analytics via Birdeye — price history, holder distribution, whale activity |
+| `onchain-whale-tracker` | Track large wallet movements and smart money across EVM and Solana |
+| `token-security-auditor` | Automated token contract security analysis before trading |
+
+### Risk & Portfolio
+| Agent | Description |
+|-------|-------------|
+| `wallet-watcher` | Monitor wallet balances and alert on significant changes |
+| `multi-chain-risk-dashboard` | Real-time risk dashboard across all open positions |
+| `portfolio-tracker` | Unified P&L tracker across all chains and platforms |
+| `multisig-manager` | Multi-signature wallet operations and proposal management |
+| `on-chain-analyst` | Deep on-chain analysis: flow tracing, wallet clustering, anomaly detection |
 
 ---
 
-## Agent file structure
+## Agent structure
 
+Each agent lives in `agents/<agent-name>/`:
 ```
 agents/<agent-name>/
-  agent.md    ← full agent definition (used with /agent command)
-  README.md   ← what it does, required skills, required keys, example prompts
+  agent.md    ← the agent definition Claude Code reads
+  README.md   ← usage docs and example prompts (optional)
 ```
 
----
-
-## Adding new agents
-
-1. Create a folder under `agents/your-agent-name/`
-2. Write `agent.md` with the agent definition
-3. Write `README.md` documenting required skills and keys
-4. Send a PR to [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents)
+The `agent.md` contains:
+- Role description
+- Required skills
+- Required API keys
+- Capabilities list
+- Behavior guidelines
+- Workflow steps
+- Output format
+- Example prompts
 
 ---
 
