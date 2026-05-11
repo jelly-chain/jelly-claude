@@ -1,6 +1,6 @@
 # Jelly-Claude
 
-> Multi-chain AI coding agent powered by Claude Code — Solana, BNB, Polygon, Polymarket, Kalshi and more.
+> Multi-chain AI coding agent powered by Claude Code — Solana, BNB, Polygon, Ethereum, Polymarket, Kalshi, predict.fun, DeFi, NFTs, and more.
 
 **GitHub:** [github.com/jelly-chain/jelly-claude](https://github.com/jelly-chain/jelly-claude)
 
@@ -10,11 +10,12 @@
 
 Jelly-Claude is a launch wrapper for [Claude Code](https://github.com/anthropics/claude-code) that:
 - Automatically selects between **Anthropic paid models** and **OpenRouter free/cheap models** based on which API key you have
-- Generates your **Solana and EVM (BNB / Polygon) wallets** at first run
-- Installs a full library of **28 skills** (Solana DeFi, BNB Chain, Polymarket, Kalshi, Hyperliquid, Base, predict.fun, Birdeye, DexScreener, jellychain.fun, and more)
-- Loads **28 agent templates** you can invoke with `/agent` inside Claude Code
+- Generates your **Solana and EVM (BNB / Polygon / Ethereum) wallets** at first run
+- Installs a full library of **38 skills** (Solana DeFi, BNB Chain, Ethereum, Polymarket, Kalshi, Hyperliquid, Base, predict.fun v2, Uniswap, Aave, 1inch, CoinGecko, Chainlink, DeFiLlama, OpenSea, GMX, OKX, and more)
+- Loads **47 agent templates** you can invoke with `/agent` inside Claude Code
 - Includes `CLAUDE.md` — session memory that pre-loads wallet paths, skill locations, and protocol reference so Claude starts every session already oriented
 - Includes `torq.sh` — token-optimised launch mode using the highest-performance free models on OpenRouter
+- Supports **13 Extension types** via the Extension-main directory (jelly-social, jelly-research, jelly-forex, jelly-ai, jelly-nft, jelly-defi, jelly-onchain, jelly-arbitrage, jelly-telegram, and more)
 
 
 ---
@@ -151,8 +152,8 @@ Base:
 3. Generates a **Solana wallet** — saved to `~/.jelly-claude/wallets/solana.json`
 4. Generates an **EVM wallet** (works for BNB Chain and Polygon) — saved to `~/.jelly-claude/wallets/evm.json`
 5. Optionally stores your Polymarket, Kalshi, predict.fun, and other service API keys in `~/.jelly-claude/.keys`
-6. Clones and installs all 28 skills from `jelly-claude-skills` (or updates them if already present)
-7. Clones and installs all 28 agent templates from `jelly-claude-agents` (or updates them if already present)
+6. Clones and installs all 38 skills from `jelly-claude-skills` (or updates them if already present)
+7. Clones and installs all 47 agent templates from `jelly-claude-agents` (or updates them if already present)
 
 > **Security:** wallet private keys and API keys are stored only in `~/.jelly-claude/` on your local machine and are never committed to any repo.
 
@@ -230,7 +231,7 @@ See [github.com/jelly-chain/jelly-claude-skills](https://github.com/jelly-chain/
 
 ## Agent Templates
 
-28 pre-built agents you can summon with `/agent` inside Claude Code.
+47 pre-built agents you can summon with `/agent` inside Claude Code.
 
 Install all (auto-clones the agents repo if needed):
 ```bash
@@ -240,12 +241,21 @@ npm run install-agents
 Then inside Claude Code:
 ```
 /agent polymarket-trader
+/agent predict-fun-trader
 /agent jupiter-trader
 /agent pump-launcher
+/agent defi-yield-optimizer
+/agent nft-flipper
+/agent onchain-whale-tracker
+/agent cross-exchange-arb
+/agent portfolio-rebalancer
+/agent market-maker
+/agent news-sentiment-trader
+/agent token-launch-monitor
 ```
 
-See [github.com/jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude/tree/main/Agent-Templates) for all templates.
-See [github.com/jelly-chain/extensions](https://github.com/jelly-chain/jelly-claude/tree/main/Extension-main) for the full EXT list.
+See [Agent-Templates/README.md](./Agent-Templates/README.md) for all 47 agent templates.
+See [Extension-main/](./Extension-main/) for all 13 extension types.
 
 
 ---
@@ -445,8 +455,10 @@ SOL: FuYxmffq2gYfLZ3WAsedqtmBtxLkA4XDcscnk9oTqV1C
 | Repo | Purpose |
 |------|---------|
 | [jelly-chain/jelly-claude](https://github.com/jelly-chain/jelly-claude) | This repo — launcher + setup |
-| [jelly-chain/jelly-claude-skills](https://github.com/jelly-chain/jelly-claude-skills) | 28 skills (Solana, BNB, Base, Hyperliquid, prediction markets, predict.fun, jellychain.fun) |
-| [jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents) | 28 agent templates |
+| [jelly-chain/jelly-claude-skills](https://github.com/jelly-chain/jelly-claude-skills) | 38 skills (Solana, BNB, ETH, Base, Hyperliquid, prediction markets, DeFi, NFTs, analytics) |
+| [jelly-chain/jelly-claude-agents](https://github.com/jelly-chain/jelly-claude-agents) | 47 agent templates |
+| [jelly-chain/predictdotfun](https://github.com/jelly-chain/predictdotfun) | predict.fun SKILL.md v2 — full CLOB API reference |
+| [jelly-chain/market-prediction-sdk-v2](https://github.com/jelly-chain/market-prediction-sdk-v2) | WMarket Prediction SDK v2 — production prediction infrastructure |
 
 ---
 

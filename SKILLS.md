@@ -1,7 +1,23 @@
-# Jelly-Claude — Skills Reference (28 skills)
+# Jelly-Claude — Skills Reference (38 skills)
 
 Skills are installed at `~/.claude/skills/<skill-name>/SKILL.md`.  
-After `setup.sh` / `install-all.sh` runs, all 28 are available automatically.
+After `setup.sh` / `install-all.sh` runs, all 38 are available automatically.
+
+---
+
+## 1inch-skill
+**Chain:** Multi-chain EVM (ETH, BNB, Polygon, Arbitrum, Base, Avalanche, zkSync)
+**Purpose:** Best-rate DEX aggregation across 300+ liquidity sources — swap quotes, approval management, and on-chain swap execution.  
+**Required keys:** `ONEINCH_API_KEY` (portal.1inch.dev), `EVM_PRIVATE_KEY`  
+**Use when:** Swapping any EVM token at the best rate, finding DEX price gaps, or routing large swaps to minimize slippage.
+
+---
+
+## aave-skill
+**Chain:** Ethereum, Base, Arbitrum, Polygon, Avalanche (Aave V3)  
+**Purpose:** Lending, borrowing, flash loans, interest rate strategies, and account health monitoring on Aave V3.  
+**Required keys:** `EVM_PRIVATE_KEY`, `ETH_RPC_URL`  
+**Use when:** Supplying collateral, borrowing assets, executing flash loans, or checking liquidation risk on Aave.
 
 ---
 
@@ -12,7 +28,6 @@ After `setup.sh` / `install-all.sh` runs, all 28 are available automatically.
 **Use when:** Swapping tokens, providing liquidity, or farming on Base chain.
 
 ---
-
 
 ## binance-skills-hub
 **Chain:** Binance CEX / BNB Chain  
@@ -54,11 +69,51 @@ After `setup.sh` / `install-all.sh` runs, all 28 are available automatically.
 
 ---
 
+## chainlink-skill
+**Chain:** Multi-chain EVM (Ethereum, BNB, Polygon, Base, Arbitrum, Avalanche)  
+**Purpose:** On-chain price feeds (all major pairs), VRF verifiable randomness, Automation (keepers), CCIP cross-chain messaging, and Data Streams.  
+**Required keys:** `ETH_RPC_URL`, `CHAINLINK_STREAMS_KEY` (optional — Data Streams only)  
+**Use when:** Reading tamper-resistant on-chain prices, integrating VRF, automating contracts, or bridging data cross-chain.
+
+---
+
+## coingecko-skill
+**Chain:** Multi-chain (all)  
+**Purpose:** Token prices, market caps, OHLCV history, trending coins, exchange data, and global market stats via the CoinGecko API.  
+**Required keys:** `COINGECKO_API_KEY` (optional — free tier works without a key, 30 req/min)  
+**Use when:** Looking up token prices, market caps, 24h volume, trending coins, or historical OHLCV data.
+
+---
+
+## defillama-skill
+**Chain:** Multi-chain (all)  
+**Purpose:** Protocol TVL, chain rankings, DeFi yield pools, stablecoin metrics, DEX volumes, bridge flows — free, no API key required.  
+**Required keys:** None  
+**Use when:** Comparing protocol TVL, finding highest yield pools, checking stablecoin health, or analyzing DeFi volume.
+
+---
+
 ## dexscreener-skill
 **Chain:** Multi-chain  
 **Purpose:** New token pair discovery via the DexScreener API — recently launched pairs, volume surges, trending tokens across all chains.  
 **Required keys:** None (public API)  
 **Use when:** Finding new token launches, spotting volume spikes, or screening pairs across Solana, BNB, ETH, and more.
+
+---
+
+## etherscan-skill
+**Chain:** Ethereum, BNB Chain, Polygon, Base, Arbitrum, Optimism (Etherscan-family)  
+**Purpose:** On-chain data — transaction history, ERC-20 transfers, token balances, contract ABIs, source code verification, gas tracker, event logs.  
+**Required keys:** `ETHERSCAN_API_KEY`, `BSCSCAN_API_KEY` (chain-dependent)  
+**Use when:** Looking up on-chain transactions, wallet balances, contract code, or event history on any EVM chain.
+
+---
+
+## gmx-skill
+**Chain:** Arbitrum, Avalanche (GMX V2)  
+**Purpose:** Perpetual futures trading, GM token liquidity provision, market data, open interest, and funding rates on GMX V2.  
+**Required keys:** `EVM_PRIVATE_KEY`, `ARB_RPC_URL`  
+**Use when:** Opening/closing perp positions on GMX, providing liquidity to GM markets, or checking market stats and funding rates.
 
 ---
 
@@ -118,6 +173,22 @@ After `setup.sh` / `install-all.sh` runs, all 28 are available automatically.
 
 ---
 
+## okx-skill
+**Chain:** CEX (OKX) + Multi-chain EVM (OKX DEX)  
+**Purpose:** OKX spot trading, perpetual futures, market data, account management, and DEX aggregation across Ethereum, BNB, Polygon, and Arbitrum.  
+**Required keys:** `OKX_API_KEY`, `OKX_SECRET_KEY`, `OKX_PASSPHRASE`  
+**Use when:** Trading on OKX (spot or perps), fetching price data, managing OKX balances, or getting best on-chain swap quotes via OKX DEX.
+
+---
+
+## opensea-skill
+**Chain:** Ethereum, Polygon, Base, Arbitrum, Optimism, Solana (OpenSea V2)  
+**Purpose:** NFT data — collections, listings, offers, sales history, trait filters, and on-chain NFT purchase execution via Seaport.  
+**Required keys:** `OPENSEA_API_KEY`, `EVM_PRIVATE_KEY`  
+**Use when:** Researching NFT collections, finding cheap listings, tracking sales, checking offers, or buying/selling NFTs on-chain.
+
+---
+
 ## polymarket-skill
 **Chain:** Polygon  
 **Purpose:** Trading on Polymarket — decentralised CLOB prediction markets settled in USDC on Polygon.  
@@ -128,9 +199,9 @@ After `setup.sh` / `install-all.sh` runs, all 28 are available automatically.
 
 ## predict-fun-skill
 **Chain:** BNB Chain (BSC)  
-**Purpose:** Trading on predict.fun — CLOB binary prediction markets settled in USDT on BNB Chain, resolved by UMA Optimistic Oracle.  
+**Purpose:** Full CLOB prediction market trading on predict.fun v2 — orderbook reads, limit/market orders, positions, timeseries, OAuth-connected accounts, TS + Python auth.  
 **Required keys:** `PREDICT_API_KEY` (mainnet only; testnet is free), `EVM_PRIVATE_KEY`  
-**Use when:** Browsing and trading predict.fun markets, placing LIMIT/MARKET orders, monitoring positions on BNB Chain.
+**Use when:** Browsing and trading predict.fun markets, placing LIMIT/MARKET orders, monitoring positions, or building automated market-making strategies.
 
 ---
 
@@ -227,3 +298,11 @@ After `setup.sh` / `install-all.sh` runs, all 28 are available automatically.
 **Purpose:** Solana wallet operations — SOL balance, SPL token accounts, token transfers, associated token accounts, close empty accounts.  
 **Required keys:** Solana wallet keypair (from `solana.json`)  
 **Use when:** Checking balances, sending SOL or SPL tokens, managing token accounts.
+
+---
+
+## uniswap-skill
+**Chain:** Ethereum, Base, Arbitrum, Polygon, Optimism (Uniswap V3 / V4)  
+**Purpose:** Token swaps, pool quotes, concentrated liquidity position management, fee tier selection, and on-chain swap execution via Uniswap V3/V4.  
+**Required keys:** `EVM_PRIVATE_KEY`, `ETH_RPC_URL`  
+**Use when:** Swapping ERC-20 tokens on Uniswap, providing concentrated liquidity, checking pool prices and depth, or building LP strategies.
