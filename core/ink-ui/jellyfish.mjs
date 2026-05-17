@@ -30,7 +30,7 @@ const RAW_FRAMES = [
   ],
 ];
 
-// Apply cyan→blue gradient: top lines brighter, tentacles darker
+// Apply mascot cyan→blue gradient: top lines brighter, tentacles darker
 function applyGradient(lines) {
   return lines.map((line, i) => {
     if (i <= 1) return chalk.cyanBright(line);
