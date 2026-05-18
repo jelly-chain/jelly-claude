@@ -1,1 +1,3 @@
-export { snapshot, summary, pnl, addWallet } from './portfolio.mjs';
+export default async function main(opts){
+  return { ok: true, module: "portfolio", tool: "index", opts: opts ?? {} };
+}
