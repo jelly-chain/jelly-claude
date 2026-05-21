@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "portfolio", tool: "index", opts: opts ?? {} };
-}
+export { add, remove, list, history as default } from './portfolio.mjs';

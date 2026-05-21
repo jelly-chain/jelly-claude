@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "browser", tool: "index", opts: opts ?? {} };
-}
+export { screenshot, fill, click, navigate, scrape } from './browser.mjs';

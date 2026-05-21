@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "audit", tool: "index", opts: opts ?? {} };
-}
+export { log, query, check } from './audit.mjs';

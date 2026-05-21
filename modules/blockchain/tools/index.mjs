@@ -1,3 +1,7 @@
-export default async function main(opts){
-  return { ok: true, module: "blockchain", tool: "index", opts: opts ?? {} };
-}
+export {
+  getBlock,
+  getTransaction,
+  getBalance,
+  getBlockHeight,
+  getTransactions,
+} from './blockchain.mjs';

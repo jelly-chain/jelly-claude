@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "calendar-sync", tool: "index", opts: opts ?? {} };
-}
+export { listEvents, createEvent, updateEvent, deleteEvent } from './calendar-sync.mjs';

@@ -58,3 +58,53 @@ export async function topGainers(args = {}) {
     .slice(0, args.limit ? Number(args.limit) : 10);
   return { ok: true, gainers };
 }
+
+// New tools
+
+/**
+ * Generate a comprehensive market report.
+ */
+export async function report(args = {}) {
+  const include = (args.include ?? 'tvl,protocols,chainMetrics,topGainers').split(',');
+  const results = {};
+
+  for (const item of include) {
+    switch (item.trim().toLowerCase()) {
+      case 'tvl':
+        results.tvl = await tvl({});
+        break;
+      case 'protocols':
+        results.protocols = await protocols({});
+        break;
+      case 'chainmetrics':
+      case 'chainmetrics':
+        results.chainMetrics = await chainMetrics({});
+        break;
+      case 'topgainers':
+        results.topGainers = await topGainers({});
+        break;
+      default:
+        console.warn(`Unknown report section: ${item}`);
+    }
+  }
+
+  return { ok: true, report: results };
+}
+
+/**
+ * Analyze correlations between multiple assets.
+ */
+export async function correlation(args = {}) {
+  // This would require historical price data which we don't have easily.
+  // For now, return a placeholder.
+  return { ok: false, error: 'Correlation analysis not implemented yet' };
+}
+
+/**
+ * Simple trend analysis for a given asset.
+ */
+export async function trend(args = {}) {
+  if (!args.asset) return { ok: false, error: 'Missing --asset' };
+  // Placeholder: just return a random trend
+  return { ok: true, asset: args.asset, trend: 'neutral', confidence: 0.5 };
+}

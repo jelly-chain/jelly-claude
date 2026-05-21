@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "backtester", tool: "index", opts: opts ?? {} };
-}
+export { simulate, optimize, compare } from './backtester.mjs';

@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "ai-agents", tool: "index", opts: opts ?? {} };
-}
+export { create, list, get, update, deleteAgent, execute } from './ai-agents.mjs';

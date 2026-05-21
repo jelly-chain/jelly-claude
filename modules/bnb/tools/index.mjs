@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "bnb", tool: "index", opts: opts ?? {} };
-}
+export { swap, liquidity, farm, borrow, lend } from './bnb.mjs';
