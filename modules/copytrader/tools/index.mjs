@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "copytrader", tool: "index", opts: opts ?? {} };
-}
+export { discover, copy, stopCopying, portfolio } from './copytrader.mjs';

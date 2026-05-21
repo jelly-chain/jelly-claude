@@ -65,3 +65,43 @@ export async function price(args = {}) {
   if (!data) return { ok: false, error: 'Could not fetch prices' };
   return { ok: true, prices: data.data ?? data };
 }
+
+// New enhanced functions
+export async function liquidity(args = {}) {
+  if (!args.mintA || !args.mintB) {
+    return { ok: false, error: 'Missing --mintA or --mintB' };
+  }
+  const url = `${JUPITER}/quote?inputMint=${args.mintA}&outputMint=${args.mintB}&amount=1000000000`;
+  const r = await httpJson(url);
+  if (!r.ok) return { ok: false, error: `Jupiter API error: ${r.status}` };
+
+  const priceImpact = r.data?.priceImpact ?? 0;
+  const liquidity = r.data?.exchanges?.map(ex => ({
+    name: ex.name,
+    liquidity: ex.liquidity,
+    price: ex.price,
+    fee: ex.fee,
+  })) ?? [];
+
+  return { ok: true, liquidity, priceImpact };
+}
+
+export async function volume(args = {}) {
+  const chain = args.chain ?? 'solana';
+  const period = args.period ?? '24h';
+  const url = `https://api.jellychain.fun/volume/${chain}?period=${period}`;
+  const data = await fetchWithCache(`volume:${chain}:${period}`, url);
+  if (!data) return { ok: false, error: 'Could not fetch volume data' };
+
+  return { ok: true, chain, period, volume: data.volume, dexVolume: data.dexVolume, cexVolume: data.cexVolume };
+}
+
+export async function topVolumePools(args = {}) {
+  const chain = args.chain ?? 'solana';
+  const limit = args.limit ? Number(args.limit) : 10;
+  const url = `https://api.jellychain.fun/pools/volume/${chain}?limit=${limit}`;
+  const data = await fetchWithCache(`pools:volume:${chain}:${limit}`, url);
+  if (!data) return { ok: false, error: 'Could not fetch pool volume data' };
+
+  return { ok: true, chain, topPools: data.pools };
+}
