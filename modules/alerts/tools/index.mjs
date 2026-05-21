@@ -1,3 +1,1 @@
-export default async function main(opts){
-  return { ok: true, module: "alerts", tool: "index", opts: opts ?? {} };
-}
+export { status, test, history, config, add, remove, list, trigger } from './alerts.mjs';
