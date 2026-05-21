@@ -1,7 +1,7 @@
 # Jelly-Claude — Agents Reference (37 agents)
 
 Agents are installed at `~/.claude/agents/<agent-name>.md`.  
-Invoke inside Claude Code with `/agent <agent-name>`.
+Invoke with `/agent <agent-name>`.
 
 ---
 

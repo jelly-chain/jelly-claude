@@ -1,0 +1,242 @@
+#!/bin/bash
+# Jelly CLI - White-label command-line interface for Jelly-Claude
+# Provides <Jelly> commands for easy interaction with the ecosystem
+
+JELLY_SCRIPT="$PWD/jelly-claude.sh"
+WORKSPACE="${JELLY_WORKSPACE:-/workspace}"
+
+# Help function
+jelly_help() {
+  echo "Jelly CLI - Command-line interface for Jelly-Claude"
+  echo ""
+  echo "Usage: <Jelly> <command> [args]"
+  echo ""
+  echo "Available commands:"
+  echo "  agents        List all available agents"
+  echo "  skills        List all installed skills"
+  echo "  predict <text> <chain>  Quick prediction"
+  echo "  scan <module> [args]    Run scanner module"
+  echo "  run <module> [args]     Run any module"
+  echo "  status        Show system status"
+  echo "  config        Configure environment"
+  echo "  help          Show this help message"
+  echo ""
+  echo "Examples:"
+  echo "  <Jelly> agents"
+  echo "  <Jelly> predict \"SOL to $200\" solana"
+  echo "  <Jelly> scan newTokens --chain bnb"
+  echo "  <Jelly> run modules/market/predict --text \"Test\" --chain solana"
+  echo ""
+  echo "For more information, visit the README or CLAUDE.md"
+  echo ""
+}
+
+# Agents command
+jelly_agents() {
+  if [ -d "$HOME/.claude/agents" ]; then
+    echo "Available Agents:"
+    echo "----------------"
+    for agent in "$HOME/.claude/agents/"*.md; do
+      if [ -f "$agent" ]; then
+        local agent_name=$(basename "$agent" .md)
+        local agent_desc=$(grep -A 1 "^# $agent_name" "$agent" | tail -n1 | sed 's/^ *//' | head -c 60)
+        echo "  $agent_name - $agent_desc"
+      fi
+    done
+  else
+    echo "No agents installed. Run: npm run install-agents"
+  fi
+}
+
+# Skills command
+jelly_skills() {
+  if [ -d "$HOME/.claude/skills" ]; then
+    echo "Installed Skills:"
+    echo "----------------"
+    for skill in "$HOME/.claude/skills/"*/; do
+      if [ -d "$skill" ] && [ -f "$skill/SKILL.md" ]; then
+        local skill_name=$(basename "$skill")
+        local skill_desc=$(head -n 50 "$skill/SKILL.md" | grep -E "^#" | head -1 | sed 's/^# //')
+        echo "  $skill_name - $skill_desc"
+      fi
+    done
+  else
+    echo "No skills installed. Run: npm run install-skills"
+  fi
+}
+
+# Predict command
+jelly_predict() {
+  local text="$1"
+  local chain="${2:-solana}"
+
+  if [ -z "$text" ]; then
+    echo "Usage: <Jelly> predict \"text\" <chain>"
+    echo "Example: <Jelly> predict \"SOL to $200\" solana"
+    return 1
+  fi
+
+  node modules/market/run.mjs predict --text="$text" --chain="$chain"
+}
+
+# Scan command
+jelly_scan() {
+  if [ $# -lt 1 ]; then
+    echo "Usage: <Jelly> scan <module> [args]"
+    echo "Example: <Jelly> scan newTokens --chain bnb"
+    return 1
+  fi
+
+  local module="$1"
+  shift
+  node modules/scanner/run.mjs "$module" -- "$@"
+}
+
+# Run command
+jelly_run() {
+  if [ $# -lt 1 ]; then
+    echo "Usage: <Jelly> run <module-path> [args]"
+    echo "Example: <Jelly> run modules/market/predict --text \"Test\" --chain solana"
+    return 1
+  fi
+
+  local module_path="$1"
+  shift
+  node "$module_path" "$@"
+}
+
+# Status command
+jelly_status() {
+  echo "Jelly-Claude System Status"
+  echo "=========================="
+  echo ""
+
+  # Check Node.js and npm
+  if command_exists node && command_exists npm; then
+    echo "✓ Node.js $(node --version) and npm $(npm --version) installed"
+  else
+    echo "✗ Node.js or npm not found"
+  fi
+
+  # Check Claude Code
+  if command_exists claude; then
+    echo "✓ Claude Code installed"
+  else
+    echo "✗ Claude Code not found"
+  fi
+
+  # Check wallet directories
+  if [ -d "$HOME/.jelly-claude/wallets" ]; then
+    echo "✓ Wallet directory exists"
+  else
+    echo "✗ Wallet directory not found"
+  fi
+
+  # Check wallet files
+  if [ -f "$HOME/.jelly-claude/wallets/solana.json" ] && [ -f "$HOME/.jelly-claude/wallets/evm.json" ]; then
+    echo "✓ Solana and EVM wallets generated"
+  else
+    echo "✗ Wallet files missing"
+  fi
+
+  # Check skills directory
+  if [ -d "$HOME/.claude/skills" ]; then
+    local skill_count=$(ls "$HOME/.claude/skills/" | wc -l)
+    echo "✓ $skill_count skills installed"
+  else
+    echo "✗ Skills directory not found"
+  fi
+
+  # Check agents directory
+  if [ -d "$HOME/.claude/agents" ]; then
+    local agent_count=$(ls "$HOME/.claude/agents/" | wc -l)
+    echo "✓ $agent_count agents installed"
+  else
+    echo "✗ Agents directory not found"
+  fi
+
+  # Check CPU usage
+  if command_exists top; then
+    local cpu_usage=$(top -l 1 -n 0 | grep "CPU(s)" | awk '{print $2}' | cut -d'%' -f1)
+    echo "CPU Usage: ${cpu_usage:-0}%"
+  fi
+
+  # Check memory
+  if command_exists free; then
+    local memory_usage=$(free | awk 'NR==2{printf "%.1f%%", $3/$2*100}')
+    echo "Memory Usage: ${memory_usage:-0}%"
+  fi
+}
+
+# Config command
+jelly_config() {
+  echo "Jelly-Claude Configuration"
+  echo "=========================="
+  echo ""
+
+  # Display relevant env vars
+  local env_vars=(
+    "ANTHROPIC_API_KEY"
+    "OPENROUTER_API_KEY"
+    "JELLY_NO_SPLASH"
+    "JELLY_CPU_AWARENESS"
+    "JELLY_MAX_AGENTS"
+    "TELEGRAM_BOT_TOKEN"
+    "TELEGRAM_CHAT_ID"
+  )
+
+  for var in "${env_vars[@]}"; do
+    local value="${!var:-not set}"
+    printf "  %-25s %s\n" "$var:" "$value"
+  done
+
+  echo ""
+  echo "To change a value, edit your .env file or set the environment variable directly."
+  echo "For example: export JELLY_NO_SPLASH=1"
+  echo ""
+}
+
+# Main function
+jelly() {
+  if [ $# -eq 0 ]; then
+    jelly_help
+    return 0
+  fi
+
+  local cmd="$1"
+  shift
+
+  case "$cmd" in
+    agents)
+      jelly_agents "$@"
+      ;;
+    skills)
+      jelly_skills "$@"
+      ;;
+    predict)
+      jelly_predict "$@"
+      ;;
+    scan)
+      jelly_scan "$@"
+      ;;
+    run)
+      jelly_run "$@"
+      ;;
+    status)
+      jelly_status "$@"
+      ;;
+    config)
+      jelly_config "$@"
+      ;;
+    help)
+      jelly_help
+      ;;
+    *)
+      echo "Unknown command: $cmd"
+      echo "Use '<Jelly> help' for available commands."
+      ;;
+  esac
+}
+
+# Call the function
+jelly "$@"

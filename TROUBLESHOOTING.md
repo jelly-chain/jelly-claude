@@ -1,4 +1,4 @@
-# Jelly-Claude — Troubleshooting Guide
+# Jelly — Troubleshooting Guide
 
 Common errors and fixes across all supported chains and protocols.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# jelly-claude.sh  —  Jelly-Chain AI coding agent launcher (Mac / Linux)
+# jelly-claude.sh  —  Jelly launcher (Mac / Linux)
 # GitHub: https://github.com/jelly-chain/jelly-claude
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -15,11 +15,6 @@ _jelly_splash() {
   [[ -t 1 ]] || return 0
   [[ "${JELLY_NO_SPLASH:-0}" == "1" ]] && return 0
   local mode="${1:-none}"
-  JELLY_SPLASH_MODE="$mode" \
-  JELLY_SPLASH_PORT="${JELLY_SPLASH_PORT:-7788}" \
-  JELLY_SPLASH_OPUS="${ANTHROPIC_DEFAULT_OPUS_MODEL:-}" \
-  JELLY_SPLASH_SONNET="${ANTHROPIC_DEFAULT_SONNET_MODEL:-}" \
-  JELLY_SPLASH_HAIKU="${ANTHROPIC_DEFAULT_HAIKU_MODEL:-}" \
   node "$SCRIPT_DIR/core/ink-ui/main.mjs" 2>/dev/null || true
 }
 
@@ -27,7 +22,7 @@ _jelly_splash() {
 if [[ -f "$SCRIPT_DIR/proxy.mjs" ]]; then
   PROXY_FILE="$SCRIPT_DIR/proxy.mjs"
 elif [[ -f "$SCRIPT_DIR/../proxy.mjs" ]]; then
-  PROXY_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/proxy.mjs"
+  PROXY_FILE="$(cd "$SCRIPT_DIR/..' && pwd)/proxy.mjs"
 else
   PROXY_FILE=""
 fi
@@ -60,7 +55,7 @@ if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
   echo ""
   echo "  ✅  Anthropic API key detected — launching with Claude paid models."
   echo ""
-  exec claude "$@"
+  exec node -r "$SCRIPT_DIR/core/extensions.mjs" claude "$@"
 
 elif [[ -n "${OPENROUTER_API_KEY:-}" ]]; then
   # Set model env vars before splash so helper picks them up
@@ -132,7 +127,7 @@ s.on('error', () => { s.destroy(); process.exit(1); });
 
   # Run claude as a child process (not exec) so the EXIT trap fires on completion
   # and reliably kills the proxy regardless of how claude exits.
-  claude "$@"
+  exec node -r "$SCRIPT_DIR/core/extensions.mjs" claude "$@"
 
 else
   _jelly_splash "none"
@@ -145,5 +140,5 @@ else
   echo "  To use paid Claude models, add:"
   echo "    ANTHROPIC_API_KEY=<your key>    — get one at https://console.anthropic.com"
   echo ""
-  exec claude "$@"
+  exec node -r "$SCRIPT_DIR/core/extensions.mjs" claude "$@"
 fi

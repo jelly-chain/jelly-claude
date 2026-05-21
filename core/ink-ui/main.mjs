@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * core/ink-ui/main.mjs — standalone Ink splash entry point.
+ * core/ink-ui/main.mjs — Jelly Octopus Ink splash screen.
  *
  * Reads display options from environment variables:
  *   JELLY_SPLASH_MODE    'anthropic' | 'openrouter' | 'none'
@@ -12,14 +12,14 @@
  * Run directly: node core/ink-ui/main.mjs
  * Called via:   core/splash.mjs showSplash() → child_process.spawn
  */
+
 // TTY guard — must be at the top so any invocation path is safe
 if (!process.stdout.isTTY || process.env.JELLY_NO_SPLASH === '1') {
   process.exit(0);
 }
 
-import React from 'react';
-import { render } from 'ink';
-import { SplashApp } from './app.mjs';
+import { Canvas } from './canvas.mjs';
+import { OctopusInk } from './animation.mjs';
 
 const opts = {
   mode:   process.env.JELLY_SPLASH_MODE ?? 'none',
@@ -31,5 +31,24 @@ const opts = {
   },
 };
 
-const { waitUntilExit } = render(React.createElement(SplashApp, opts));
-await waitUntilExit();
+// Get terminal dimensions
+const width = process.stdout.columns || 80;
+const height = process.stdout.rows || 24;
+const canvas = new Canvas(width, height);
+const ink = new OctopusInk(canvas, opts);
+
+// Start animation
+ink.start();
+
+// Keep process alive until interrupted
+process.on('SIGINT', () => {
+  ink.stop();
+  process.exit(0);
+});
+
+['SIGTERM', 'SIGHUP'].forEach(signal => {
+  process.on(signal, () => {
+    ink.stop();
+    process.exit(0);
+  });
+});

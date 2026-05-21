@@ -1,4 +1,4 @@
-# Jelly-Claude — Skills Reference (38 skills)
+# Jelly — Skills Reference (38 skills)
 
 Skills are installed at `~/.claude/skills/<skill-name>/SKILL.md`.  
 After `setup.sh` / `install-all.sh` runs, all 38 are available automatically.

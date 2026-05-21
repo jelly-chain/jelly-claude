@@ -21,8 +21,8 @@ NC='\033[0m'
 banner() {
   echo ""
   echo -e "${CYAN}  ╔══════════════════════════════════════════════════╗${NC}"
-  echo -e "${CYAN}  ║         Jelly-Claude Setup Wizard                ║${NC}"
-  echo -e "${CYAN}  ║   Multi-Chain AI Agent — github.com/jelly-chain  ║${NC}"
+  echo -e "${CYAN}  ║         Jelly Setup Wizard                       ║${NC}"
+  echo -e "${CYAN}  ║   Multi-Chain AI Agent Ecosystem                 ║${NC}"
   echo -e "${CYAN}  ╚══════════════════════════════════════════════════╝${NC}"
   echo ""
 }
@@ -33,6 +33,15 @@ warn() { echo -e "${YELLOW}  ⚠ $1${NC}"; }
 err()  { echo -e "${RED}  ✗ $1${NC}"; }
 
 banner
+
+# Parse arguments
+AUTO_MODE=false
+for arg in "$@"; do
+  if [[ "$arg" == "--auto" ]]; then
+    AUTO_MODE=true
+    break
+  fi
+done
 
 # ── 1. Check Node.js ─────────────────────────────────────────────────────────
 step "Checking Node.js..."
@@ -183,28 +192,51 @@ step "Optional: Prediction market & service API keys"
 echo ""
 echo "  Polymarket (prediction markets on Polygon)"
 echo "  Get keys at: https://app.polymarket.com (Settings > API)"
-read -r -p "  POLYMARKET_API_KEY (Enter to skip): " PM_KEY
-read -r -p "  POLYMARKET_SECRET (Enter to skip): " PM_SECRET
-read -r -p "  POLYMARKET_PASSPHRASE (Enter to skip): " PM_PASS
+if [[ "$AUTO_MODE" == "false" ]]; then
+  read -r -p "  POLYMARKET_API_KEY (Enter to skip): " PM_KEY
+  read -r -p "  POLYMARKET_SECRET (Enter to skip): " PM_SECRET
+  read -r -p "  POLYMARKET_PASSPHRASE (Enter to skip): " PM_PASS
+else
+  PM_KEY=""
+  PM_SECRET=""
+  PM_PASS=""
+fi
 
 echo ""
 echo "  Kalshi (regulated US prediction markets)"
 echo "  Get keys at: https://kalshi.com (Account > API Access)"
-read -r -p "  KALSHI_API_KEY (Enter to skip): " KA_KEY
-read -r -p "  KALSHI_API_SECRET (Enter to skip): " KA_SECRET
+if [[ "$AUTO_MODE" == "false" ]]; then
+  read -r -p "  KALSHI_API_KEY (Enter to skip): " KA_KEY
+  read -r -p "  KALSHI_API_SECRET (Enter to skip): " KA_SECRET
+else
+  KA_KEY=""
+  KA_SECRET=""
+fi
 
 echo ""
 echo "  Helius — Solana RPC and DAS API"
 echo "  Get key at: https://helius.xyz"
-read -r -p "  HELIUS_API_KEY (Enter to skip): " HELIUS_KEY
+if [[ "$AUTO_MODE" == "false" ]]; then
+  read -r -p "  HELIUS_API_KEY (Enter to skip): " HELIUS_KEY
+else
+  HELIUS_KEY=""
+fi
 
 echo ""
-read -r -p "  BNBCHAIN_API_KEY (Enter to skip): " BNB_KEY
+if [[ "$AUTO_MODE" == "false" ]]; then
+  read -r -p "  BNBCHAIN_API_KEY (Enter to skip): " BNB_KEY
+else
+  BNB_KEY=""
+fi
 
 echo ""
 echo "  predict.fun — BNB Chain prediction markets (USDT)"
 echo "  Get key via Discord: https://discord.gg/predictdotfun → support ticket"
-read -r -p "  PREDICT_API_KEY (Enter to skip): " PREDICT_KEY
+if [[ "$AUTO_MODE" == "false" ]]; then
+  read -r -p "  PREDICT_API_KEY (Enter to skip): " PREDICT_KEY
+else
+  PREDICT_KEY=""
+fi
 
 # Write .keys file
 mkdir -p "$(dirname "$KEYS_FILE")"
