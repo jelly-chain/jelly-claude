@@ -1,0 +1,27 @@
+{
+  "bullish": [
+    "ath", "all time high", "breakout", "surge", "rally", "moon", "pump",
+    "integration", "partnership", "launch", "mainnet", "upgrade", "adoption",
+    "tvl increase", "volume spike", "whale buy", "accumulation", "listing",
+    "staking rewards", "airdrop", "token burn", "buyback", "treasury",
+    "institutional", "etf", "approval", "ecosystem growth", "developer activity",
+    "defi summer", "bull run", "golden cross", "oversold", "support hold",
+    "prediction market yes", "market above"
+  ],
+  "bearish": [
+    "hack", "exploit", "rug", "dump", "crash", "ban", "sec", "regulation",
+    "delisting", "insolvency", "liquidation", "death cross", "resistance",
+    "tvl drop", "outflow", "whale sell", "distribution", "unlock",
+    "inflation", "sell pressure", "bearish divergence", "overbought",
+    "prediction market no", "below support", "fdic", "shutdown",
+    "vulnerability", "security breach", "bridge attack", "oracle manipulation"
+  ],
+  "neutral": [
+    "sideways", "consolidation", "range bound", "flat", "stable",
+    "announcement", "update", "maintenance", "migration", "audit"
+  ],
+  "highPriority": [
+    "hack", "exploit", "rug", "sec lawsuit", "exchange down", "bridge attack",
+    "critical vulnerability", "mass liquidation", "flash crash", "circuit breaker"
+  ]
+}

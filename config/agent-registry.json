@@ -1,0 +1,120 @@
+{
+  "agents": {
+    "echo": {
+      "module": "ai-agents",
+      "file": "echo.js",
+      "modules": [],
+      "crons": [],
+      "tools": []
+    },
+    "predictor": {
+      "module": "ai-agents",
+      "file": "predictor.js",
+      "modules": ["prediction", "portfolio", "memory"],
+      "crons": ["0 9 * * 1-5", "0 12 * * 1-5", "0 15 * * 1-5"],
+      "tools": ["jelly-score", "risk-assessment"]
+    },
+    "scanner": {
+      "module": "ai-agents",
+      "file": "scanner.js",
+      "modules": ["scanner", "market"],
+      "crons": ["*/15 * * * *"],
+      "tools": ["dexscreener", "birdeye"]
+    },
+    "risk-guard": {
+      "module": "ai-agents",
+      "file": "risk-guard.js",
+      "modules": ["risk"],
+      "crons": ["*/5 * * * *"],
+      "tools": ["risk-assessment"]
+    },
+    "cron-trader": {
+      "module": "ai-agents",
+      "file": "cron-trader.js",
+      "modules": ["trade", "memory", "scheduler"],
+      "crons": [],
+      "tools": ["execute-trade"]
+    },
+    "memory-coordinator": {
+      "module": "ai-agents",
+      "file": "memory-coordinator.js",
+      "modules": ["memory"],
+      "crons": [],
+      "tools": ["compress", "checkpoint", "restore"]
+    },
+    "signal-aggregator": {
+      "module": "ai-agents",
+      "file": "signal-aggregator.js",
+      "modules": ["signals", "memory"],
+      "crons": [],
+      "tools": ["add-signal", "calculate-score"]
+    },
+    "risk-pulse": {
+      "module": "ai-agents",
+      "file": "risk-pulse.js",
+      "modules": ["risk", "monitor"],
+      "crons": ["*/5 * * * *"],
+      "tools": ["pulse-check"]
+    },
+    "portfolio-drift-detector": {
+      "module": "ai-agents",
+      "file": "portfolio-drift-detector.js",
+      "modules": ["portfolio", "memory"],
+      "crons": ["0 9 * * *", "0 15 * * *"],
+      "tools": ["check-drift", "rebalance-suggestion"]
+    },
+    "news-alpha-scout": {
+      "module": "ai-agents",
+      "file": "news-alpha-scout.js",
+      "modules": ["news", "scanner"],
+      "crons": ["*/30 * * * *"],
+      "tools": ["scan", "trending"]
+    },
+    "gas-optimizer": {
+      "module": "ai-agents",
+      "file": "gas-optimizer.js",
+      "modules": ["blockchain", "evm"],
+      "crons": [],
+      "tools": ["best-time", "estimate"]
+    },
+    "yield-compounder": {
+      "module": "ai-agents",
+      "file": "yield-compounder.js",
+      "modules": ["defi", "portfolio"],
+      "crons": ["0 2 * * *"],
+      "tools": ["check", "compound"]
+    },
+    "liquidity-hunter": {
+      "module": "ai-agents",
+      "file": "liquidity-hunter.js",
+      "modules": ["defi", "scanner"],
+      "crons": ["*/10 * * * *"],
+      "tools": ["scan", "opportunity"]
+    },
+    "correlation-net": {
+      "module": "ai-agents",
+      "file": "correlation-net.js",
+      "modules": ["market", "portfolio"],
+      "crons": [],
+      "tools": ["calculate", "hedge"]
+    }
+  },
+  "module_groups": {
+    "prediction-markets": {
+      "skills": ["kalshi-skill", "polymarket-skill", "predictfun-skill"],
+      "modules": ["prediction-markets", "kalshi", "polymarket"]
+    },
+    "meme-trading": {
+      "skills": ["jupiter-skill", "raydium-skill", "pumpfun-skill"],
+      "modules": ["scanner", "bnb"]
+    },
+    "defi-yield": {
+      "skills": [],
+      "modules": ["defi", "yield-optimizer"]
+    },
+    "nft-flip": {
+      "skills": ["metaplex-skill"],
+      "modules": ["nft"]
+    }
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "dexscreener": {
+    "baseUrl": "https://api.dexscreener.com/latest",
+    "pairsUrl": "https://api.dexscreener.com/latest/dex/pairs",
+    "searchUrl": "https://api.dexscreener.com/latest/dex/search",
+    "tokenUrl": "https://api.dexscreener.com/latest/dex/tokens",
+    "rateLimit": 300,
+    "requiresKey": false
+  },
+  "birdeye": {
+    "baseUrl": "https://public-api.birdeye.so",
+    "rateLimit": 100,
+    "requiresKey": true,
+    "keyEnv": "BIRDEYE_API_KEY"
+  },
+  "helius": {
+    "baseUrl": "https://mainnet.helius-rpc.com",
+    "apiUrl": "https://api.helius.xyz/v0",
+    "rateLimit": 50,
+    "requiresKey": true,
+    "keyEnv": "HELIUS_API_KEY"
+  },
+  "polymarket": {
+    "baseUrl": "https://clob.polymarket.com",
+    "gammaUrl": "https://gamma-api.polymarket.com",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "POLYMARKET_API_KEY"
+  },
+  "polymarket-clob": {
+    "baseUrl": "https://clob.polymarket.com",
+    "gammaUrl": "https://gamma-api.polymarket.com",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "POLYMARKET_API_KEY",
+    "sdk": "polymarket-clob-sdk"
+  },
+  "kalshi": {
+    "baseUrl": "https://trading-api.kalshi.com/trade-api/v2",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "KALSHI_API_KEY"
+  },
+  "kalshi-v3": {
+    "baseUrl": "https://trading-api.kalshi.com/trade-api/v3",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "KALSHI_API_KEY",
+    "sdk": "kalshi-v3-sdk"
+  },
+  "predictFun": {
+    "baseUrl": "https://api.predict.fun",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "PREDICT_API_KEY"
+  },
+  "jellychain": {
+    "baseUrl": "https://api.jellychain.fun",
+    "rateLimit": 120,
+    "requiresKey": false
+  },
+  "jupiter": {
+    "baseUrl": "https://quote-api.jup.ag/v6",
+    "priceUrl": "https://price.jup.ag/v4",
+    "rateLimit": 100,
+    "requiresKey": false
+  },
+  "hyperliquid": {
+    "baseUrl": "https://api.hyperliquid.xyz",
+    "wsUrl": "wss://api.hyperliquid.xyz/ws",
+    "rateLimit": 100,
+    "requiresKey": false
+  },
+  "llamafi": {
+    "baseUrl": "https://api.llama.fi",
+    "rateLimit": 120,
+    "requiresKey": false
+  },
+  "coingecko": {
+    "baseUrl": "https://api.coingecko.com/api/v3",
+    "rateLimit": 30,
+    "requiresKey": false
+  },
+  "sportradar": {
+    "baseUrl": "https://api.sportradar.com/v7",
+    "rateLimit": 30,
+    "requiresKey": true,
+    "keyEnv": "SPORTRADAR_API_KEY",
+    "sdk": "sportradar-sdk"
+  },
+  "metaculus": {
+    "baseUrl": "https://www.metaculus.com/api",
+    "rateLimit": 60,
+    "requiresKey": false,
+    "keyEnv": "METACULUS_API_TOKEN",
+    "sdk": "metaculus-sdk"
+  },
+  "manifold": {
+    "baseUrl": "https://api.manifold.markets/v0",
+    "rateLimit": 60,
+    "requiresKey": false,
+    "keyEnv": "MANIFOLD_API_KEY",
+    "sdk": "manifold-sdk"
+  },
+  "betfair": {
+    "baseUrl": "https://api.betfair.com/ex/betting/rest/v1.0",
+    "rateLimit": 30,
+    "requiresKey": true,
+    "keyEnv": "BETFAIR_APP_KEY",
+    "sdk": "betfair-exchange-sdk"
+  },
+  "espn": {
+    "baseUrl": "https://site.api.espn.com/apis/site/v2/sports",
+    "rateLimit": 100,
+    "requiresKey": false,
+    "sdk": "espn-live-sdk"
+  },
+  "pandascore": {
+    "baseUrl": "https://api.pandascore.co",
+    "rateLimit": 30,
+    "requiresKey": true,
+    "keyEnv": "PANDASCORE_API_KEY",
+    "sdk": "esports-sdk"
+  },
+  "cricapi": {
+    "baseUrl": "https://api.cricapi.com/v1",
+    "rateLimit": 30,
+    "requiresKey": true,
+    "keyEnv": "CRICAPI_KEY",
+    "sdk": "cricket-sdk"
+  },
+  "openweathermap": {
+    "baseUrl": "https://api.openweathermap.org/data/2.5",
+    "rateLimit": 60,
+    "requiresKey": true,
+    "keyEnv": "WEATHER_API_KEY",
+    "sdk": "weather-venue-sdk"
+  },
+  "eventbrite": {
+    "baseUrl": "https://www.eventbriteapi.com/v3",
+    "rateLimit": 30,
+    "requiresKey": true,
+    "keyEnv": "EVENTBRITE_TOKEN",
+    "sdk": "events-intelligence-sdk"
+  },
+  "ticketmaster": {
+    "baseUrl": "https://app.ticketmaster.com/discovery/v2",
+    "rateLimit": 30,
+    "requiresKey": true,
+    "keyEnv": "TICKETMASTER_KEY",
+    "sdk": "events-intelligence-sdk"
+  },
+  "predictit": {
+    "baseUrl": "https://www.predictit.org/api",
+    "rateLimit": 30,
+    "requiresKey": false,
+    "keyEnv": "PREDICTIT_API_KEY",
+    "sdk": "political-prediction-sdk"
+  }
+}

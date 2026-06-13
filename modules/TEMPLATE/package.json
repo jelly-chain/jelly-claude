@@ -1,0 +1,15 @@
+{
+  "name": "@jelly/[module-name]",
+  "version": "1.0.0",
+  "description": "[MODULE_NAME] module for Jelly",
+  "main": "run.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "lint": "eslint run.mjs tools/"
+  },
+  "keywords": ["jelly", "[module-name]"],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

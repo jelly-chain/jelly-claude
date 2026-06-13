@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Jelly-Claude .gitignore — keep secrets out of git
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Environment files — NEVER commit these
+.env
+.env.local
+.env.*.local
+.keys
+*.key
+*.pem
+
+# Wallet files — private keys, DO NOT COMMIT
+wallets/
+solana.json
+evm.json
+id.json
+*.wallet
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Runtime files
+node_modules/
+*.tgz
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+coverage/
+.nyc_output/
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Cache directories
+.cache/
+.cache-store/
+
+# Test artifacts
+*.test-db
+*.test-cache
+
+# Temp files
+tmp/
+temp/
+
+# Session data
+session/
+sessions/
+
+# Core dump files
+core.dump
+*.core

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jelly-Claude — Multi-Chain AI Agent</title>
+<meta name="description" content="Multi-chain AI agent for prediction markets, DeFi, and on-chain analytics. Solana, BNB, Polygon, Polymarket, Kalshi, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e4e4ef;
+    --text-dim: #8888a0;
+    --cyan: #00d4ff;
+    --magenta: #e040fb;
+    --purple: #7c4dff;
+    --green: #00e676;
+    --yellow: #ffd740;
+    --orange: #ff6d00;
+    --gradient: linear-gradient(135deg, var(--cyan), var(--magenta), var(--purple));
+    --gradient-text: linear-gradient(90deg, var(--cyan), var(--magenta));
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Animated background ── */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-glow-1 { top: -200px; left: -200px; background: var(--cyan); }
+  .bg-glow-2 { bottom: -200px; right: -200px; background: var(--magenta); }
+  .bg-glow-3 { top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--purple); opacity: 0.08; }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-weight: 800;
+    font-size: 1.25rem;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    padding: 0.5rem 1.25rem;
+    background: var(--gradient);
+    color: #000 !important;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 1rem;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: var(--cyan);
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
+
+  .hero-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 .gradient {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-dim);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--gradient);
+    color: #000;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 212, 255, 0.3); }
+
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--cyan); background: rgba(0, 212, 255, 0.05); }
+
+  /* ── Terminal preview ── */
+  .terminal {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+  }
+
+  .terminal-window {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .terminal-dot-red { background: #ff5f57; }
+  .terminal-dot-yellow { background: #febc2e; }
+  .terminal-dot-green { background: #28c840; }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .terminal-body {
+    padding: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .terminal-line { display: block; }
+  .t-cyan { color: var(--cyan); }
+  .t-magenta { color: var(--magenta); }
+  .t-green { color: var(--green); }
+  .t-yellow { color: var(--yellow); }
+  .t-dim { color: var(--text-dim); }
+  .t-bold { font-weight: 600; }
+
+  /* ── Sections ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--cyan);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Features grid ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.2s;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-card p {
+    font-size: 0.875rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ── Chains ── */
+  .chains {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .chain-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .chain-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── Code blocks ── */
+  .code-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 1rem;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .code-body {
+    padding: 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .code-body .comment { color: #5c6370; }
+  .code-body .keyword { color: var(--magenta); }
+  .code-body .string { color: var(--green); }
+  .code-body .command { color: var(--cyan); }
+  .code-body .prompt { color: var(--yellow); }
+
+  /* ── Stats ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    padding: 3rem 0;
+  }
+
+  .stat { text-align: center; }
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Skills marquee ── */
+  .skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .skill-tag {
+    padding: 0.375rem 0.875rem;
+    background: rgba(124, 77, 255, 0.1);
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: var(--purple);
+    font-weight: 500;
+  }
+
+  /* ── CTA ── */
+  .cta {
+    text-align: center;
+    padding: 6rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .cta p {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Footer ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  footer a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero { padding: 5rem 1.5rem 3rem; }
+    section { padding: 3rem 1.5rem; }
+    .features-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="bg-glow bg-glow-3"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="nav-logo">Jelly</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#chains">Chains</a>
+    <a href="#modules">Modules</a>
+    <a href="#start">Get Started</a>
+    <a href="https://github.com/jelly-chain/jelly-claude" class="nav-cta">GitHub ↗</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> v2.1 — Now Live</div>
+  <h1>Meet <span class="gradient">Jelly</span>.<br>Your AI Agent for<br>Everything On-Chain.</h1>
+  <p>Multi-chain AI agent for prediction markets, DeFi, and on-chain analytics. Powered by Claude Code. Branded by Jelly.</p>
+  <div class="hero-buttons">
+    <a href="#start" class="btn btn-primary">Get Started →</a>
+    <a href="https://github.com/jelly-chain/jelly-claude" class="btn btn-secondary">View on GitHub</a>
+  </div>
+</div>
+
+<!-- Terminal Preview -->
+<div class="terminal">
+  <div class="terminal-window">
+    <div class="terminal-bar">
+      <div class="terminal-dot terminal-dot-red"></div>
+      <div class="terminal-dot terminal-dot-yellow"></div>
+      <div class="terminal-dot terminal-dot-green"></div>
+      <span class="terminal-title">jelly-claude — bash</span>
+    </div>
+    <div class="terminal-body">
+      <span class="terminal-line"><span class="t-prompt">$</span> <span class="t-command">git clone</span> <span class="t-string">https://github.com/jelly-chain/jelly-claude</span></span>
+      <span class="terminal-line"><span class="t-prompt">$</span> <span class="t-command">cd</span> <span class="t-string">jelly-claude</span></span>
+      <span class="terminal-line"><span class="t-prompt">$</span> <span class="t-command">bash</span> <span class="t-string">setup.sh</span></span>
+      <span class="terminal-line"><span class="t-dim">  ▗▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖ ▗▖▗▖  ▗▖▗▄▄▖ ▗▖▗▖  ▗▖</span></span>
+      <span class="terminal-line"><span class="t-dim">   ▐▌ ▐▐▌  ▐▌  █▌  ▐▌▗▘▐▌  ▐▌▐▌ ▐▐▌  ▐▌▗▘</span></span>
+      <span class="terminal-line"><span class="t-dim">   ▐▌ ▐▐▌  ▐▌  █▌   ▐█   ▝▚▗▞▘  ▐▐▌  ▐▘█</span></span>
+      <span class="terminal-line"><span class="t-dim">▗▄▖▐▌ ▐▝▚▗▞▘▝▚▗▐▙▚▗▐▌▗▞▝▚▗▞▝▐▙▚▝▚▗▞▌  ▝▚▗▞▗▖▗▞</span></span>
+      <span class="terminal-line"><span class="t-dim">   Jelly-Claude v2.1 · Ready</span></span>
+      <span class="terminal-line"></span>
+      <span class="terminal-line"><span class="t-green">  ✓</span> Solana wallet generated: <span class="t-cyan">7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU</span></span>
+      <span class="terminal-line"><span class="t-green">  ✓</span> EVM wallet generated: <span class="t-cyan">0x7a25...F3e9</span></span>
+      <span class="terminal-line"><span class="t-green">  ✓</span> 38 skills installed</span></span>
+      <span class="terminal-line"><span class="t-green">  ✓</span> 47 agent templates loaded</span></span>
+      <span class="terminal-line"></span>
+      <span class="terminal-line"><span class="t-prompt">$</span> <span class="t-command">bash</span> <span class="t-string">jelly-claude.sh</span></span>
+      <span class="terminal-line"><span class="t-yellow">  ✅  Anthropic API key detected — launching Jelly.</span></span>
+      <span class="terminal-line"></span>
+      <span class="terminal-line"><span class="t-magenta t-bold">  Jelly-Claude v2.1 · Ready</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- Stats -->
+<section style="padding-top: 2rem;">
+  <div class="stats">
+    <div class="stat"><div class="stat-value">38</div><div class="stat-label">Skills</div></div>
+    <div class="stat"><div class="stat-value">47</div><div class="stat-label">Agent Templates</div></div>
+    <div class="stat"><div class="stat-value">9</div><div class="stat-label">Modules</div></div>
+    <div class="stat"><div class="stat-value">7</div><div class="stat-label">Chains</div></div>
+    <div class="stat"><div class="stat-value">13</div><div class="stat-label">Extensions</div></div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="section-label">Features</div>
+  <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+  <p class="section-desc">Jelly wraps Claude Code in a purpose-built shell for on-chain intelligence — prediction markets, DeFi, trading, and analytics.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>Intelligent Model Selection</h3>
+      <p>Auto-switches between Anthropic paid models and OpenRouter free/cheap tiers based on your API key.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Jelly Score Engine</h3>
+      <p>Proprietary signal quality metric (0–100) for prediction market edge detection and position sizing.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Auto Wallet Generation</h3>
+      <p>Solana and EVM wallets generated at first run. Keys stored locally, never committed.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>TORQ Mode</h3>
+      <p>Token-optimized launch using the highest-performance free models on OpenRouter.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔌</div>
+      <h3>38 Protocol Skills</h3>
+      <p>Jupiter, Raydium, Polymarket, Kalshi, Hyperliquid, Uniswap, Aave, GMX, OpenSea, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>47 Agent Templates</h3>
+      <p>Pre-built agents for market making, arbitrage, whale tracking, yield optimization, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>9 CLI Modules</h3>
+      <p>Market, portfolio, scanner, prediction markets, DeFi, bridge, alerts, analytics, wallet — all runnable from CLI.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <h3>Circuit Breakers & Caching</h3>
+      <p>Intelligent caching layer, rate-limit protection, and API failure guards built in.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3>Telegram Remote</h3>
+      <p>Control and monitor Jelly from any Telegram client. Bot commands and message forwarding.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Chains -->
+<section id="chains">
+  <div class="section-label">Supported Chains</div>
+  <h2 class="section-title">Multi-chain from day one.</h2>
+  <p class="section-desc">One agent, every chain that matters.</p>
+
+  <div class="chains">
+    <div class="chain-badge"><span class="dot" style="background:#9945FF"></span>Solana</div>
+    <div class="chain-badge"><span class="dot" style="background:#F3BA2F"></span>BNB Chain</div>
+    <div class="chain-badge"><span class="dot" style="background:#8247E5"></span>Polygon</div>
+    <div class="chain-badge"><span class="dot" style="background:#0052FF"></span>Base</div>
+    <div class="chain-badge"><span class="dot" style="background:#FF492B"></span>Ethereum</div>
+    <div class="chain-badge"><span class="dot" style="background:#00C9A7"></span>Avalanche</div>
+    <div class="chain-badge"><span class="dot" style="background:#E84142"></span>Arbitrum</div>
+  </div>
+</section>
+
+<!-- Modules -->
+<section id="modules">
+  <div class="section-label">CLI Modules</div>
+  <h2 class="section-title">Run anything from the terminal.</h2>
+  <p class="section-desc">No Claude session needed — every module is a standalone CLI tool.</p>
+
+  <div class="code-block">
+    <div class="code-bar">
+      <span>Bash</span>
+      <span style="cursor:pointer;color:var(--cyan)" onclick="navigator.clipboard.writeText(this.closest('.code-block').querySelector('.code-body').innerText)">Copy</span>
+    </div>
+    <div class="code-body">
+      <span class="comment"># Predict a signal (Jelly Score 0–100)</span><br>
+      <span class="prompt">$</span> <span class="command">node</span> modules/market/run.mjs predict --text <span class="string">"Solana TVL surge"</span> --chain solana<br><br>
+      <span class="comment"># Scan new tokens on BNB Chain</span><br>
+      <span class="prompt">$</span> <span class="command">node</span> modules/scanner/run.mjs newTokens --chain bsc --maxAge 30<br><br>
+      <span class="comment"># Cross-platform arbitrage detection</span><br>
+      <span class="prompt">$</span> <span class="command">node</span> modules/prediction-markets/run.mjs arbitrage --query <span class="string">"BTC"</span><br><br>
+      <span class="comment"># Portfolio snapshot</span><br>
+      <span class="prompt">$</span> <span class="command">node</span> modules/portfolio/run.mjs snapshot --solana<br><br>
+      <span class="comment"># DeFi yield search</span><br>
+      <span class="prompt">$</span> <span class="command">node</span> modules/defi/run.mjs yields --chain solana --minApy 20<br><br>
+      <span class="comment"># Bridge route comparison</span><br>
+      <span class="prompt">$</span> <span class="command">node</span> modules/bridge/run.mjs fees --fromChain 1 --toChain 56
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section>
+  <div class="section-label">Skills</div>
+  <h2 class="section-title">38 skills. 38 superpowers.</h2>
+  <p class="section-desc">Each skill teaches Jelly how to interact with a specific protocol or API.</p>
+
+  <div class="skills-row">
+    <span class="skill-tag">Jupiter</span>
+    <span class="skill-tag">Raydium</span>
+    <span class="skill-tag">Meteora</span>
+    <span class="skill-tag">pump.fun</span>
+    <span class="skill-tag">Polymarket</span>
+    <span class="skill-tag">Kalshi</span>
+    <span class="skill-tag">Hyperliquid</span>
+    <span class="skill-tag">predict.fun</span>
+    <span class="skill-tag">Uniswap</span>
+    <span class="skill-tag">PancakeSwap</span>
+    <span class="skill-tag">Aave</span>
+    <span class="skill-tag">1inch</span>
+    <span class="skill-tag">CoinGecko</span>
+    <span class="skill-tag">Chainlink</span>
+    <span class="skill-tag">DeFiLlama</span>
+    <span class="skill-tag">OpenSea</span>
+    <span class="skill-tag">GMX</span>
+    <span class="skill-tag">OKX</span>
+    <span class="skill-tag">Birdeye</span>
+    <span class="skill-tag">Helius</span>
+    <span class="skill-tag">Metaplex</span>
+    <span class="skill-tag">Base</span>
+    <span class="skill-tag">BNB Chain</span>
+    <span class="skill-tag">Solana</span>
+    <span class="skill-tag">Ethereum</span>
+    <span class="skill-tag">Polygon</span>
+    <span class="skill-tag">Wallet</span>
+    <span class="skill-tag">Trading</span>
+    <span class="skill-tag">NFT</span>
+    <span class="skill-tag">DeFi</span>
+    <span class="skill-tag">On-Chain</span>
+    <span class="skill-tag">Arbitrage</span>
+    <span class="skill-tag">Social</span>
+    <span class="skill-tag">Research</span>
+    <span class="skill-tag">Forex</span>
+    <span class="skill-tag">Prediction</span>
+    <span class="skill-tag">Analytics</span>
+    <span class="skill-tag">Telegram</span>
+    <span class="skill-tag">AI</span>
+  </div>
+</section>
+
+<!-- Get Started -->
+<section id="start">
+  <div class="section-label">Get Started</div>
+  <h2 class="section-title">Up and running in 60 seconds.</h2>
+
+  <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.75rem;color:var(--cyan);">Mac / Linux</h3>
+  <div class="code-block">
+    <div class="code-bar"><span>Bash</span></div>
+    <div class="code-body">
+      <span class="comment"># Clone the repo</span><br>
+      <span class="prompt">$</span> <span class="command">git clone</span> <span class="string">https://github.com/jelly-chain/jelly-claude</span><br>
+      <span class="prompt">$</span> <span class="command">cd</span> <span class="string">jelly-claude</span><br><br>
+      <span class="comment"># Run the setup wizard (one time only)</span><br>
+      <span class="prompt">$</span> <span class="command">bash</span> <span class="string">setup.sh</span><br><br>
+      <span class="comment"># Add your API key to .env</span><br>
+      <span class="prompt">$</span> <span class="command">nano</span> <span class="string">.env</span><br><br>
+      <span class="comment"># Launch the agent</span><br>
+      <span class="prompt">$</span> <span class="command">bash</span> <span class="string">jelly-claude.sh</span><br><br>
+      <span class="comment"># Or launch in TORQ mode (best performance per token)</span><br>
+      <span class="prompt">$</span> <span class="command">bash</span> <span class="string">torq.sh</span>
+    </div>
+  </div>
+
+  <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.75rem;color:var(--cyan);">Windows (PowerShell)</h3>
+  <div class="code-block">
+    <div class="code-bar"><span>PowerShell</span></div>
+    <div class="code-body">
+      <span class="comment"># If you get an execution policy error, run first:</span><br>
+      <span class="prompt">PS&gt;</span> Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned<br><br>
+      <span class="prompt">PS&gt;</span> <span class="command">git clone</span> <span class="string">https://github.com/jelly-chain/jelly-claude</span><br>
+      <span class="prompt">PS&gt;</span> <span class="command">cd</span> <span class="string">jelly-claude</span><br>
+      <span class="prompt">PS&gt;</span> .\setup.ps1<br>
+      <span class="prompt">PS&gt;</span> .\jelly-claude.ps1
+    </div>
+  </div>
+
+  <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.75rem;color:var(--cyan);">API Key — which one to use?</h3>
+  <div class="features-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+    <div class="feature-card">
+      <h3>🅰️ Anthropic (recommended)</h3>
+      <p>Best quality, requires a paid account.</p>
+      <div class="code-block" style="margin-top:0.75rem;border:none;">
+        <div class="code-body" style="padding:0.75rem;font-size:0.75rem;">
+          <span class="command">ANTHROPIC_API_KEY</span>=sk-ant-...
+        </div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <h3>🅱️ OpenRouter (free/low-cost)</h3>
+      <p>Works with free or cheap models. Jelly auto-configures model tiers.</p>
+      <div class="code-block" style="margin-top:0.75rem;border:none;">
+        <div class="code-body" style="padding:0.75rem;font-size:0.75rem;">
+          <span class="command">OPENROUTER_API_KEY</span>=sk-or-...
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Prediction Markets -->
+<section>
+  <div class="section-label">Prediction Markets</div>
+  <h2 class="section-title">Trade the future. Anywhere.</h2>
+  <p class="section-desc">Jelly Score-powered trading across every major prediction market.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <h3>Polymarket <span style="color:var(--text-dim);font-weight:400;">— Polygon</span></h3>
+      <p>USDC-backed prediction markets. Proxy wallet approval handled by the <code style="background:var(--bg3);padding:0.125rem 0.375rem;border-radius:4px;font-size:0.8rem;">polymarket-trader</code> agent.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Kalshi <span style="color:var(--text-dim);font-weight:400;">— Regulated US</span></h3>
+      <p>Fiat-only, fully regulated US prediction markets. No crypto wallet needed.</p>
+    </div>
+    <div class="feature-card">
+      <h3>predict.fun <span style="color:var(--text-dim);font-weight:400;">— BNB Chain</span></h3>
+      <p>Open global access, no KYC. USDT-backed. One-time approval via agent.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>Ready to dive in?</h2>
+  <p>Clone the repo, run setup, and start trading with AI.</p>
+  <div class="hero-buttons">
+    <a href="https://github.com/jelly-chain/jelly-claude" class="btn btn-primary">View on GitHub →</a>
+    <a href="https://github.com/jelly-chain/jelly-claude/blob/main/README.md" class="btn btn-secondary">Read the Docs</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>Jelly-Claude v2.1 · Built by <a href="https://github.com/jelly-chain">Jelly Chain</a> · <a href="https://jellychain.fun">jellychain.fun</a></p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;">MIT License</p>
+</footer>
+
+</body>
+</html>

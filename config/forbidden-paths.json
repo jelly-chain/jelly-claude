@@ -1,0 +1,15 @@
+[
+  ".env",
+  ".keys",
+  "wallets/",
+  "solana.json",
+  "evm.json",
+  "id.json",
+  ".ssh/",
+  ".gnupg/",
+  "node_modules/.bin/",
+  "/etc/passwd",
+  "/etc/shadow",
+  "C:/Windows/System32",
+  "C:/Users"
+]

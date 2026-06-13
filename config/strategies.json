@@ -1,0 +1,40 @@
+{
+  "jellyScore": {
+    "fullSize": { "min": 80, "max": 100, "sizePct": 100 },
+    "halfSize": { "min": 60, "max": 79, "sizePct": 50 },
+    "noTrade":  { "min": 0,  "max": 59, "sizePct": 0 }
+  },
+  "positionRules": {
+    "maxPctPerTrade": 5,
+    "hedgeMaxPct": 20,
+    "stableReservePct": 30,
+    "highRiskCapPct": 10
+  },
+  "entryRules": {
+    "alwaysCheckSecurity": true,
+    "alwaysReadResolutionSource": true,
+    "maxPriceImpactPct": 2,
+    "maxSlippagePct": 3
+  },
+  "exitRules": {
+    "stopLossPct": 40,
+    "takeProfitPct": 200,
+    "closeHedgeOnResolution": true
+  },
+  "autoSignal": {
+    "enabled": true,
+    "chains": ["solana", "bnb", "polygon"],
+    "triggerOnVolumeSpike": true,
+    "triggerOnTVLShock": true,
+    "triggerOnKeyword": true,
+    "minConfidence": 0.6,
+    "maxRiskScore": 0.6
+  },
+  "copyTrade": {
+    "maxWalletsToWatch": 5,
+    "mirrorSizePct": 15,
+    "minWalletHistoryDays": 30,
+    "stopLossPct": 25,
+    "takeProfitPct": 50
+  }
+}

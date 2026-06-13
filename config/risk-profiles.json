@@ -1,0 +1,93 @@
+{
+  "conservative": {
+    "name": "Conservative",
+    "description": "Low risk, small position sizes, strict entry requirements",
+    "jellyScoreMin": 80,
+    "maxPositionPct": 2,
+    "maxLeverage": 1,
+    "stopLossPct": 20,
+    "takeProfitPct": 50,
+    "maxOpenPositions": 3,
+    "riskScoreMax": 0.3,
+    "confidenceMin": 0.8,
+    "circuitBreakerLossPct": 5
+  },
+  "balanced": {
+    "name": "Balanced",
+    "description": "Moderate risk, standard Jelly Score rules from STRATEGIES.md",
+    "jellyScoreMin": 60,
+    "maxPositionPct": 5,
+    "maxLeverage": 2,
+    "stopLossPct": 40,
+    "takeProfitPct": 200,
+    "maxOpenPositions": 7,
+    "riskScoreMax": 0.6,
+    "confidenceMin": 0.6,
+    "circuitBreakerLossPct": 15
+  },
+  "aggressive": {
+    "name": "Aggressive",
+    "description": "Higher risk, larger positions, looser entry requirements",
+    "jellyScoreMin": 40,
+    "maxPositionPct": 10,
+    "maxLeverage": 5,
+    "stopLossPct": 60,
+    "takeProfitPct": 500,
+    "maxOpenPositions": 15,
+    "riskScoreMax": 0.8,
+    "confidenceMin": 0.4,
+    "circuitBreakerLossPct": 30
+  },
+  "sniper": {
+    "name": "Sniper",
+    "description": "High conviction, low frequency trades with tight control",
+    "jellyScoreMin": 85,
+    "maxPositionPct": 3,
+    "maxLeverage": 1,
+    "stopLossPct": 15,
+    "takeProfitPct": 100,
+    "maxOpenPositions": 2,
+    "riskScoreMax": 0.2,
+    "confidenceMin": 0.9,
+    "circuitBreakerLossPct": 2
+  },
+  "hodl": {
+    "name": "HODL",
+    "description": "Long-term fundamental focus, minimal trading",
+    "jellyScoreMin": 90,
+    "maxPositionPct": 15,
+    "maxLeverage": 1,
+    "stopLossPct": 80,
+    "takeProfitPct": 1000,
+    "maxOpenPositions": 10,
+    "riskScoreMax": 0.2,
+    "confidenceMin": 0.85,
+    "circuitBreakerLossPct": 30
+  },
+  "scalper": {
+    "name": "Scalper",
+    "description": "High frequency, tight spreads, technical focus",
+    "jellyScoreMin": 50,
+    "maxPositionPct": 2,
+    "maxLeverage": 5,
+    "stopLossPct": 5,
+    "takeProfitPct": 10,
+    "maxOpenPositions": 50,
+    "riskScoreMax": 0.7,
+    "confidenceMin": 0.5,
+    "circuitBreakerLossPct": 10
+  },
+  "swing": {
+    "name": "Swing",
+    "description": "1-7 day holds, technical momentum focus",
+    "jellyScoreMin": 55,
+    "maxPositionPct": 8,
+    "maxLeverage": 3,
+    "stopLossPct": 30,
+    "takeProfitPct": 100,
+    "maxOpenPositions": 10,
+    "riskScoreMax": 0.5,
+    "confidenceMin": 0.55,
+    "circuitBreakerLossPct": 20
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "solana": {
+    "id": "solana",
+    "name": "Solana",
+    "rpc": {
+      "default": "https://api.mainnet-beta.solana.com",
+      "helius": "https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}",
+      "devnet": "https://api.devnet.solana.com"
+    },
+    "explorer": "https://solscan.io",
+    "nativeCurrency": "SOL",
+    "decimals": 9,
+    "protocols": ["jupiter", "raydium", "orca", "meteora", "pump.fun", "metaplex"]
+  },
+  "bnb": {
+    "id": 56,
+    "name": "BNB Chain",
+    "rpc": {
+      "default": "https://bsc-dataseed.binance.org",
+      "backup1": "https://bsc-dataseed1.defibit.io",
+      "backup2": "https://bsc-dataseed2.defibit.io",
+      "testnet": "https://data-seed-prebsc-1-s1.binance.org:8545"
+    },
+    "explorer": "https://bscscan.com",
+    "nativeCurrency": "BNB",
+    "decimals": 18,
+    "protocols": ["pancakeswap", "four.meme", "predict.fun"]
+  },
+  "ethereum": {
+    "id": 1,
+    "name": "Ethereum",
+    "rpc": {
+      "default": "https://eth.llamarpc.com",
+      "backup": "https://cloudflare-eth.com"
+    },
+    "explorer": "https://etherscan.io",
+    "nativeCurrency": "ETH",
+    "decimals": 18,
+    "protocols": ["uniswap", "curve", "aave"]
+  },
+  "base": {
+    "id": 8453,
+    "name": "Base",
+    "rpc": {
+      "default": "https://mainnet.base.org",
+      "backup": "https://base.llamarpc.com"
+    },
+    "explorer": "https://basescan.org",
+    "nativeCurrency": "ETH",
+    "decimals": 18,
+    "protocols": ["aerodrome", "uniswap-v3"]
+  },
+  "polygon": {
+    "id": 137,
+    "name": "Polygon",
+    "rpc": {
+      "default": "https://polygon-rpc.com",
+      "backup": "https://rpc-mainnet.maticvigil.com"
+    },
+    "explorer": "https://polygonscan.com",
+    "nativeCurrency": "MATIC",
+    "decimals": 18,
+    "protocols": ["polymarket", "quickswap"]
+  },
+  "arbitrum": {
+    "id": 42161,
+    "name": "Arbitrum",
+    "rpc": {
+      "default": "https://arb1.arbitrum.io/rpc",
+      "backup": "https://arbitrum.llamarpc.com"
+    },
+    "explorer": "https://arbiscan.io",
+    "nativeCurrency": "ETH",
+    "decimals": 18,
+    "protocols": ["gmx", "camelot"]
+  },
+  "hyperliquid": {
+    "id": "hyperliquid",
+    "name": "Hyperliquid L1",
+    "rpc": {
+      "default": "https://api.hyperliquid.xyz"
+    },
+    "explorer": "https://hyperliquid.xyz",
+    "nativeCurrency": "USDC",
+    "decimals": 6,
+    "protocols": ["hyperliquid-perp"]
+  }
+}

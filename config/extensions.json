@@ -1,0 +1,49 @@
+{
+  "extensions": [
+    {
+      "name": "jelly-social",
+      "description": "Social media integration for Twitter, Reddit, Discord, Telegram, LinkedIn, TikTok",
+      "path": "Extension-main/jelly-social"
+    },
+    {
+      "name": "jelly-research",
+      "description": "Research automation with web search, news monitoring, content extraction",
+      "path": "Extension-main/jelly-research"
+    },
+    {
+      "name": "jelly-forex",
+      "description": "Forex and traditional finance trading integration",
+      "path": "Extension-main/jelly-forex"
+    },
+    {
+      "name": "jelly-ai-agents",
+      "description": "Advanced AI agents for specialized tasks",
+      "path": "Extension-main/jelly-ai-agents"
+    },
+    {
+      "name": "jelly-nft",
+      "description": "NFT analytics, floor sweeping, rarity checks",
+      "path": "Extension-main/jelly-nft"
+    },
+    {
+      "name": "jelly-defi",
+      "description": "DeFi yield optimization, lending, liquidity provision",
+      "path": "Extension-main/jelly-defi"
+    },
+    {
+      "name": "jelly-onchain",
+      "description": "On-chain analytics, whale tracking, wallet intelligence",
+      "path": "Extension-main/jelly-onchain"
+    },
+    {
+      "name": "jelly-arbitrage",
+      "description": "Cross-market, cross-exchange, cross-chain arbitrage detection",
+      "path": "Extension-main/jelly-arbitrage"
+    },
+    {
+      "name": "jelly-telegram",
+      "description": "Telegram notifications and bot integration",
+      "path": "Extension-main/jelly-telegram"
+    }
+  ]
+}

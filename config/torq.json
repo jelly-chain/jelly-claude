@@ -1,0 +1,25 @@
+{
+  "description": "TORQ mode — token-optimised model selection for maximum performance per token",
+  "openrouter": {
+    "opus":   "deepseek/deepseek-v4-pro",
+    "sonnet": "x-ai/grok-4.3",
+    "haiku":  "nvidia/nemotron-3-nano-30b-a3b",
+    "subagent": "qwen/qwen3-next-80b-a3b-thinking"
+  },
+  "anthropic": {
+    "opus":    "claude-opus-4-20250127",
+    "sonnet":  "claude-sonnet-4-20250127",
+    "haiku":   "claude-3-5-haiku-20241022",
+    "subagent": "claude-3-5-haiku-20241022"
+  },
+  "proxyPort": 7788,
+  "maxTokensPerRequest": 8192,
+  "temperature": 0.3,
+  "systemCachingEnabled": true,
+  "retry": {
+    "maxRetries": 10,
+    "initialDelayMs": 1000,
+    "maxDelayMs": 30000,
+    "backoffFactor": 2
+  }
+}

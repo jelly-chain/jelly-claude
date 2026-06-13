@@ -1,0 +1,140 @@
+{
+  "sdks": {
+    "sportradar": {
+      "path": "../SDK-main/sportradar-sdk",
+      "version": "1.0.0",
+      "category": "data-provider",
+      "priority": "P0",
+      "requiresKey": true,
+      "keyEnv": "SPORTRADAR_API_KEY",
+      "capabilities": ["live-scores", "play-by-play", "injuries", "lineups", "statistics"],
+      "sports": ["football", "basketball", "tennis", "baseball", "hockey", "mma", "f1"]
+    },
+    "polymarket-clob": {
+      "path": "../SDK-main/polymarket-clob-sdk",
+      "version": "1.0.0",
+      "category": "prediction-market",
+      "priority": "P0",
+      "requiresKey": true,
+      "keyEnv": "POLYMARKET_API_KEY",
+      "capabilities": ["orderbook", "trades", "arbitrage", "market-search"]
+    },
+    "kalshi-v3": {
+      "path": "../SDK-main/kalshi-v3-sdk",
+      "version": "1.0.0",
+      "category": "prediction-market",
+      "priority": "P1",
+      "requiresKey": true,
+      "keyEnv": "KALSHI_API_KEY",
+      "capabilities": ["events", "markets", "orderbook", "orders", "portfolio"]
+    },
+    "metaculus": {
+      "path": "../SDK-main/metaculus-sdk",
+      "version": "1.0.0",
+      "category": "forecasting",
+      "priority": "P1",
+      "requiresKey": false,
+      "keyEnv": "METACULUS_API_TOKEN",
+      "capabilities": ["questions", "predictions", "calibration", "superforecasters"]
+    },
+    "manifold": {
+      "path": "../SDK-main/manifold-sdk",
+      "version": "1.0.0",
+      "category": "forecasting",
+      "priority": "P3",
+      "requiresKey": false,
+      "keyEnv": "MANIFOLD_API_KEY",
+      "capabilities": ["markets", "bets", "calibration", "backtesting"]
+    },
+    "betfair": {
+      "path": "../SDK-main/betfair-exchange-sdk",
+      "version": "1.0.0",
+      "category": "betting-exchange",
+      "priority": "P2",
+      "requiresKey": true,
+      "keyEnv": "BETFAIR_APP_KEY",
+      "capabilities": ["events", "markets", "orderbook", "exchange-odds"]
+    },
+    "events-intelligence": {
+      "path": "../SDK-main/events-intelligence-sdk",
+      "version": "1.0.0",
+      "category": "data-provider",
+      "priority": "P3",
+      "requiresKey": true,
+      "keyEnv": "EVENTBRITE_TOKEN",
+      "capabilities": ["events", "concerts", "festivals", "market-signals"]
+    },
+    "political-prediction": {
+      "path": "../SDK-main/political-prediction-sdk",
+      "version": "1.0.0",
+      "category": "prediction-market",
+      "priority": "P3",
+      "requiresKey": false,
+      "keyEnv": "PREDICTIT_API_KEY",
+      "capabilities": ["elections", "politics", "policy", "polling-comparison"]
+    },
+    "weather-venue": {
+      "path": "../SDK-main/weather-venue-sdk",
+      "version": "1.0.0",
+      "category": "data-provider",
+      "priority": "P2",
+      "requiresKey": true,
+      "keyEnv": "WEATHER_API_KEY",
+      "capabilities": ["weather", "venue-impact", "outdoor-sports"]
+    },
+    "espn-live": {
+      "path": "../SDK-main/espn-live-sdk",
+      "version": "1.0.0",
+      "category": "data-provider",
+      "priority": "P3",
+      "requiresKey": false,
+      "keyEnv": null,
+      "capabilities": ["scores", "standings", "schedules", "free-fallback"]
+    },
+    "esports": {
+      "path": "../SDK-main/esports-sdk",
+      "version": "1.0.0",
+      "category": "sport-specific",
+      "priority": "P1",
+      "requiresKey": true,
+      "keyEnv": "PANDASCORE_API_KEY",
+      "capabilities": ["lol", "cs2", "dota2", "valorant", "tournaments", "predictions"]
+    },
+    "cricket": {
+      "path": "../SDK-main/cricket-sdk",
+      "version": "1.0.0",
+      "category": "sport-specific",
+      "priority": "P2",
+      "requiresKey": true,
+      "keyEnv": "CRICAPI_KEY",
+      "capabilities": ["ipl", "icc", "big-bash", "predictions", "nrr"]
+    },
+    "line-movement": {
+      "path": "../SDK-main/line-movement-sdk",
+      "version": "1.0.0",
+      "category": "analytics",
+      "priority": "P2",
+      "requiresKey": false,
+      "keyEnv": null,
+      "capabilities": ["odds-tracking", "steam-detection", "sharp-money", "line-value"]
+    },
+    "social-sentiment": {
+      "path": "../SDK-main/social-sentiment-sdk",
+      "version": "1.0.0",
+      "category": "analytics",
+      "priority": "P4",
+      "requiresKey": false,
+      "keyEnv": null,
+      "capabilities": ["twitter", "reddit", "sentiment", "volume-spikes", "drama-detection"]
+    },
+    "prediction-protocol": {
+      "path": "../SDK-main/prediction-protocol-sdk",
+      "version": "1.0.0",
+      "category": "protocol",
+      "priority": "P4",
+      "requiresKey": false,
+      "keyEnv": null,
+      "capabilities": ["gnosis", "augur", "settlement", "conditional-tokens"]
+    }
+  }
+}
